@@ -6,3 +6,12 @@ A tool for establishing community radio among a set of friends.
 * Chat
 * RIYL - easy adding of recommendations
 * Stats - playing around w/ stats
+
+This is majorly work in progress code, I've so far only started working on the initial crawler for my music files, but I've put it up in case it's of interest.
+
+License will most likely be under GPLv3
+
+Requirements:
+* Python 2.4
+  * Lots of libraries, most easy_installable
+* CouchDB
