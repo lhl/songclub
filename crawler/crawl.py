@@ -4,12 +4,8 @@ import magic, os, re, socket, sys
 import eyeD3
 from couchdb import *
 from hashlib import *
-# from mutagen.mp3 import MP3, HeaderNotFoundError
-# from mutagen.easyid3 import EasyID3
-# from mutagen.id3 import ID3NoHeaderError
 from pprint import pprint
 from time import sleep,strftime
-
 
 '''
 TODO:
@@ -21,6 +17,7 @@ TODO:
 
   Better MP3 - filetype vs longfiletype
 '''
+
 s = Server('http://127.0.0.1:5984/')
 db = s['songclub']
 mp3re = re.compile('\.mp3$', re.IGNORECASE)
@@ -127,33 +124,10 @@ def main():
         except eyeD3.tag.InvalidAudioFormatException:
           pass
 
-      '''
-      try:
-        mp3 = MP3(entry['location'].encode('utf8'))
-        entry['mp3'] = {}
-        entry['mp3']['length'] = mp3.info.length
-        entry['mp3']['bitrate'] = mp3.info.bitrate
-
-        if mp3.tags:
-          frames = mp3.tags.keys()
-          for key in frames:
-            entry['mp3'][ key] = repr(mp3.tags[key])
-
-        try:
-          mp3 = EasyID3(entry['location'].encode('utf8'))
-          for key in mp3.keys():
-            entry['mp3'][key] = repr(mp3[key])
-        except ID3NoHeaderError:
-          pass
-      except OverflowError:
-        print "Overflow Error on: " + entry['location']
-      except HeaderNotFoundError:
-        pass
-      '''
-
       # pprint(entry)
       # print
       addentry(entry)
+
 
 def addentry(entry):
   try: 
