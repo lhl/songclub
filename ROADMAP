@@ -1,0 +1,59 @@
+Scanning Daemon
+---
+* Go through files
+* If MP3 scan ID3 data
+* UI for easily modifying items (based on folder, etc)
+
+
+Streaming Server
+---
+* Realtime transcoding
+* Handle multiple streams
+* Allow multiple people to stream a single stream
+* Dynamic playlist
+
+look at screamy, edna
+http://www.amk.ca/python/howto/sockets/
+http://squirl.nightmare.com/medusa/async_sockets.html
+http://davidf.sjsoft.com/mirrors/mcmillan-inc/sock1.html
+http://www.slideshare.net/didip/socket-programming-in-python
+http://www.evolt.org/article/Socket_Programming_in_Python/17/60276/
+http://www.perlfect.com/articles/streaming.shtml
+http://icecast.imux.net/viewtopic.php?p=1351&
+http://www.gnu.org/software/gnump3d/history.html
+
+iPhone - see iDJ code
+http://icecast.imux.net/viewtopic.php?t=5861&sid=4eabc22cd169f28b6d48a759bd4a545e
+http://www.nabble.com/patch-for-native-iphone-support-td19136800.html
+http://lists.xiph.org/pipermail/icecast/2005-June/009534.html
+http://cocoawithlove.com/2008/09/streaming-and-playing-live-mp3-stream.html
+http://www.bbc.co.uk/blogs/radiolabs/2007/11/bbc_podcasts_on_the_iphone_and.shtml
+
+
+Needs to be constant bitrate and the sample needs to be a multiple of 22.1
+
+
+
+Library Management
+---
+Pull from Last.fm, etc -- see Gazelle and OinkPlus code
+
+
+
+Schema
+---
+File
+Song
+Artist
+Album
+Playlist
+ Versions
+History
+
+
+Infrastructure
+---
+Python
+CouchDB
+jQuery
+YUI 3

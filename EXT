@@ -1,0 +1,74 @@
+Audio Manipulation
+===
+PyMedia
+http://pymedia.org/
+
+ID3 Tagging
+===
+Mutagen
+http://code.google.com/p/quodlibet/wiki/Development/Mutagen
+
+TagPy
+http://mathema.tician.de/software/tagpy
+
+pytagger
+http://www.liquidx.net/pytagger/
+
+
+XMMS2
+http://wiki.xmms2.xmms.se/wiki/Main_Page
+http://wiki.xmms2.xmms.se/wiki/The_Medialib
+
+* URL
+* Artist, Title, and Album
+* Genre
+* Arbitrary stream properties (bitrate, comments, duration, etc).
+* Entire playlists, so they can be easily recalled. (In contrast with trying to find some m3u playlist saved in some obscure place..)
+
+
+PyMediaServer
+http://pymediaserver.sourceforge.net/
+
+Amarok import
+
+
+PyBeat
+http://www.pybeat.org/
+
+edna
+http://edna.sourceforge.net/
+
+Python script that generates playlists
+
+
+Amarok
+http://amarok.kde.org/
+
+
+Complete Systems
+===
+MPD/Pitchfork
+http://mpd.wikia.com/wiki/Music_Player_Daemon_Wiki
+http://www.itrium.de/pages/home/mpd_ipod_touch_musikserver_remote_wlan.php
+http://manatlan.infogami.com/wymypy
+http://mpd.wikia.com/wiki/Client:Pitchfork
+http://www.renedegroot.nl/mpd.xml
+http://sourceforge.net/projects/orangeplayer/
+http://mpd.wikia.com/wiki/Client:DaveMP
+
+mpd+icecast: http://nion.modprobe.de/blog/archives/631-streaming-from-your-fileserver-using-mpd-and-icecast.html
+
+
+Jinzora
+http://en.jinzora.com/
+
+PHP, does a lot of stuff
+
+
+media hive
+http://www.mhive.org/
+
+
+Library Mangaement
+===
+http://wiki.musicbrainz.org/PicardTagger
