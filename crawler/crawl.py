@@ -5,7 +5,7 @@ import eyeD3
 from couchdb import *
 from hashlib import *
 from pprint import pprint
-from time import sleep,strftime
+from time import sleep, strftime
 
 '''
 TODO:
@@ -23,7 +23,7 @@ db = s['songclub']
 mp3re = re.compile('\.mp3$', re.IGNORECASE)
 
 def main():
-  dir = '/locker/music/_misc'
+  dir = '/locker/music'
 
   for root, dirs, files in os.walk(dir):
     root = unicode(root, 'utf8')
@@ -55,7 +55,7 @@ def main():
       if mp3count:
         entry['mp3count'] = mp3count
 
-      # addentry(entry)
+      addentry(entry)
 
     # Files
     for f in files:
