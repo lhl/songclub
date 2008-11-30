@@ -19,6 +19,8 @@ TODO:
   http://unit.bjork.com/specials/albums/medulla/
 
   Better MP3 - filetype vs longfiletype
+
+  Handle KeyboardInterrupt
 '''
 
 s = Server('http://127.0.0.1:5984/')
@@ -97,14 +99,7 @@ def main():
         entry['sha1'] = sha1(open(entry['location'], 'rb').read()).hexdigest()
         entry['type'] = magic.from_file(entry['location'].encode('utf8'))
 
-        # Man, Mutagen and eyeD3 both suck. And they throw exceptions like nobody's business
-        # Can't there just be a UFP-like library that just works (actually, there is,
-        # but it's getID3() for PHP.  There's just nothing good for Python...
-        try:
-          entry = mutagenparse(entry)
-        except:
-          print strftime("[%Y-%m-%d %H:%M:%S] ") + 'Mutagen Error with ' + entry['location'].encode('utf8') + ' ', sys.exc_info()
-          entry = eyeD3parse(entry)
+        getID3(entry) 
 
         # pprint(entry)
         # print
@@ -126,6 +121,18 @@ def addentry(entry):
   except UnicodeDecodeError:
     print strftime("[%Y-%m-%d %H:%M:%S] ") + 'Couldn\'t add to CouchDB. Unicode Error with: ' + entry['location']
 
+def getID3(entry):
+  # Man, Mutagen and eyeD3 both suck. And they throw exceptions like nobody's business
+  # Can't there just be a UFP-like library that just works (actually, there is,
+  # but it's getID3() for PHP.  There's just nothing good for Python...
+
+  try:
+    entry = mutagenparse(entry)
+  except:
+    try:
+      entry = eyeD3parse(entry)
+    except:
+      print strftime("[%Y-%m-%d %H:%M:%S] ") + "ID3 Parsing Error: " + entry['location'].encode('utf8') + ' ', sys.exc_info()
 
 def mutagenparse(entry):
   entry['mp3'] = {}
@@ -146,55 +153,49 @@ def mutagenparse(entry):
   except ID3NoHeaderError:
     pass
 
-  return entry
-
 
 def eyeD3parse(entry):
   if eyeD3.isMp3File(entry['location'].encode('utf8')):
-    try:
-      mp3 = eyeD3.Mp3AudioFile(entry['location'].encode('utf8'))
-      entry['mp3'] = {}
-      entry['mp3']['parser'] = 'eyeD3'
-      entry['mp3']['vbr'], entry['mp3']['bitrate'] = mp3.getBitRate()
-      entry['mp3']['freq'] = mp3.getSampleFreq()
-      entry['mp3']['length'] = mp3.getPlayTime()
+    mp3 = eyeD3.Mp3AudioFile(entry['location'].encode('utf8'))
+    entry['mp3'] = {}
+    entry['mp3']['parser'] = 'eyeD3'
+    entry['mp3']['vbr'], entry['mp3']['bitrate'] = mp3.getBitRate()
+    entry['mp3']['freq'] = mp3.getSampleFreq()
+    entry['mp3']['length'] = mp3.getPlayTime()
 
-      if mp3.tag:
-        if mp3.tag.getArtist():
-          entry['mp3']['artist'] = mp3.tag.getArtist()
-        if mp3.tag.getTitle():
-          entry['mp3']['title'] = mp3.tag.getTitle()
-        if mp3.tag.getAlbum():
-          entry['mp3']['album'] = mp3.tag.getAlbum()
-        if mp3.tag.getYear():
-          entry['mp3']['year'] = mp3.tag.getYear()
-        if mp3.tag.getTrackNum():
-          entry['mp3']['track'] = mp3.tag.getTrackNum()
-        if mp3.tag.getDiscNum():
-          entry['mp3']['disc'] = mp3.tag.getDiscNum()
-        if mp3.tag.getVersion():
-          entry['mp3']['version'] = mp3.tag.getVersion()
-        if mp3.tag.getVersionStr():
-          entry['mp3']['versionstring'] = mp3.tag.getVersionStr()
-        try:
-          if mp3.tag.getBPM():
-            entry['mp3']['bpm'] = mp3.tag.getBPM()
-        except ValueError:
-          pass
-        if mp3.tag.getPublisher():
-          entry['mp3']['publiser'] = mp3.tag.getPublisher()
+    if mp3.tag:
+      if mp3.tag.getArtist():
+        entry['mp3']['artist'] = mp3.tag.getArtist()
+      if mp3.tag.getTitle():
+        entry['mp3']['title'] = mp3.tag.getTitle()
+      if mp3.tag.getAlbum():
+        entry['mp3']['album'] = mp3.tag.getAlbum()
+      if mp3.tag.getYear():
+        entry['mp3']['year'] = mp3.tag.getYear()
+      if mp3.tag.getTrackNum():
+        entry['mp3']['track'] = mp3.tag.getTrackNum()
+      if mp3.tag.getDiscNum():
+        entry['mp3']['disc'] = mp3.tag.getDiscNum()
+      if mp3.tag.getVersion():
+        entry['mp3']['version'] = mp3.tag.getVersion()
+      if mp3.tag.getVersionStr():
+        entry['mp3']['versionstring'] = mp3.tag.getVersionStr()
+      try:
+        if mp3.tag.getBPM():
+          entry['mp3']['bpm'] = mp3.tag.getBPM()
+      except ValueError:
+        pass
+      if mp3.tag.getPublisher():
+        entry['mp3']['publiser'] = mp3.tag.getPublisher()
 
-        if mp3.tag.getDate():
-          entry['mp3']['date'] = map(lambda x: x.getDate(), mp3.tag.getDate())
-        if mp3.tag.getComments():
-          entry['mp3']['comments'] = map(lambda x: x.__unicode__(), mp3.tag.getComments())
-        if mp3.tag.getLyrics():
-          entry['mp3']['lyrics'] = map(lambda x: x.__unicode__(), mp3.tag.getLyrics())
-        if mp3.tag.getUserTextFrames():
-          entry['mp3']['usertext'] = map(lambda x: x.__unicode__(), mp3.tag.getUserTextFrames())
-    except: 
-      print strftime("[%Y-%m-%d %H:%M:%S] ") + 'eyeD3 Error with ' + entry['location'].encode('utf8') + ' ', sys.exc_info()
-  return entry
+      if mp3.tag.getDate():
+        entry['mp3']['date'] = map(lambda x: x.getDate(), mp3.tag.getDate())
+      if mp3.tag.getComments():
+        entry['mp3']['comments'] = map(lambda x: x.__unicode__(), mp3.tag.getComments())
+      if mp3.tag.getLyrics():
+        entry['mp3']['lyrics'] = map(lambda x: x.__unicode__(), mp3.tag.getLyrics())
+      if mp3.tag.getUserTextFrames():
+        entry['mp3']['usertext'] = map(lambda x: x.__unicode__(), mp3.tag.getUserTextFrames())
 
 
 if __name__ == "__main__":
