@@ -1,0 +1,114 @@
+{% extends "dojango/base.html" %}
+
+
+{% block dojango_header_extra %}
+	<style type="text/css">
+		@import "{{ DOJANGO.DOJO_URL }}/resources/dojo.css";
+		@import "{{ DOJANGO.DIJIT_URL }}/themes/dijit.css";
+		@import "{{ DOJANGO.DIJIT_URL }}/themes/tundra/tundra.css";
+		@import "{{ DOJANGO.DIJIT_URL }}/tests/css/dijitTests.css";
+		@import "{{ DOJANGO.DOJOX_URL }}/layout/resources/FloatingPane.css"; 
+		@import "{{ DOJANGO.DOJOX_URL }}/layout/resources/ResizeHandle.css"; 
+	</style>
+
+	<script type="text/javascript">
+		function postSubmit(){
+			var form = dojo.byId("postForm");
+			dojo.xhrPost({url:form.action,
+				handleAs:"json",
+				content:{text:form.text.value},
+				load:function(response, ioArgs){
+					if (response.success){
+						dojo.byId("messages").innerHTML = response.users + '<hr>' + response.messages;
+					} else {
+						dojo.byId("messages").innerHTML = "Error: "+response.error;
+					}
+				},
+				error:function(data){ // This happens on a 500 error or alikes.
+					dojo.byId("messages").innerHTML = "Error sending data.";
+				}
+			});
+			form.text.value="";
+		}
+	</script>
+	
+{% endblock %}
+
+{% block dojango_page_title %}Django-chat test page{% endblock %}
+
+{% block dojango_body %}
+<body class="tundra">
+
+	{% block content %}
+	<a href=/chat/admin/logout/>logout</a>
+	<h1>Django-chat test page</h1>
+	Django-chat allows to include a private chat client in your site's pages.
+	
+	<h2>Implementation</h2>
+	django-chat uses the following external components:
+	<ul>
+	<li>dojango
+	<li>dojo
+	</ul>
+	
+	
+	<h2>Demo</h2>
+	<ul>
+	<li>Log in with a username
+	<li>fill in the password field with a group's name within room1, room2, room3.
+	<li>then you will be able to chat with other users in the same room.
+	</ul>
+	
+	<h2>Links</h2>
+	<ul>
+	<li><a href="http://code.google.com/p/django-chat/" target=devsite>django-chat dev site</a>
+	<li><a href="browse/chat/post/" target=browse>browse posts in database</a>
+	</ul>
+	
+	
+	{% endblock %}
+
+		<div dojoType="dojox.layout.FloatingPane"  id="chatClient"
+			title="Django chat client" resizable="false" dockable="true" closable="false"
+			style="width:260px; background:#fff; position:absolute; top:30px; left:600px;"
+		>
+		<div id="messages" style="height:200px;">
+		Loading messages ...
+		</div>
+		
+		<div id="input">
+		<form id="postForm" onsubmit="postSubmit(); return false;" action="/chat/post/">
+		<input dojoType="dijit.form.TextBox" name="text" value="" />
+	    <button dojoType="dijit.form.Button" type="submit">Send</button>
+	    </div>
+    
+    </div>    
+
+	<script type="text/javascript"> // dojo.requires()
+		dojo.require("dojox.layout.FloatingPane"); 
+		dojo.require("dijit.form.TextBox"); 
+		dojo.require("dijit.form.Button"); 
+		dojo.require("dojo.parser"); // scan page for widgets
+
+		// scan page for widgets and instantiate them
+		dojo.require("dojo.parser");	
+
+		function chat_update() {
+		    var wait = 30000
+			dojo.xhrGet({
+				url: "./update",
+				handleAs: "json",
+				load: function(data, ioargs){
+					dojo.byId("messages").innerHTML = data.users + '<hr>' + data.messages;
+					wait = data.wait_value * 1000
+					setTimeout(chat_update, wait)
+				}
+			});
+		}
+		
+		dojo.addOnLoad(function() {
+			setTimeout(chat_update, 2000)
+		});
+	</script>
+</body>
+{% endblock %}

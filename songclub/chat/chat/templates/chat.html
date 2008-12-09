@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{ LANGUAGE_CODE }}" xml:lang="{{ LANGUAGE_CODE }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<head>
+<title>Django chat</title>
+<script language="javascript">
+var no_reload = false
+function noreload()
+{
+   no_reload = true
+}
+function reload()
+{
+   if (no_reload) return;
+   window.history.go(0);
+   setTimeout(reload, {{ wait_value }}000);
+}
+</script>
+
+</head>
+<body onLoad="setTimeout(reload, {{ wait_value }}000);">
+<form method=post>
+<input name="text" value="" onfocus="noreload();" />
+<input type="image" src="http://goflow.alwaysdata.net/images/send.png" title="send">
+</form>
+<hr>
+{{ users|safe }}
+<p>
+{{ messages|safe }}
+</body>
+</html>

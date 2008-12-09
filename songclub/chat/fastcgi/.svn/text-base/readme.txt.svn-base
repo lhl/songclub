@@ -1,0 +1,5 @@
+- copy chat directory in the www one
+- chmod +x chat/django.fcgi
+- edit chat/django.fcgi and set sys.path
+- edit chat/.htaccess and set prefix
+- ...

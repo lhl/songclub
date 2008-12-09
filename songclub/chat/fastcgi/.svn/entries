@@ -1,0 +1,43 @@
+8
+
+dir
+12
+http://django-chat.googlecode.com/svn/trunk/fastcgi
+http://django-chat.googlecode.com/svn
+
+
+
+2008-09-23T22:04:04.202975Z
+9
+esimorre@free.fr
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+ef3883ca-8561-11dd-ad27-0f66e57d2035
+
+chat
+dir
+
+readme.txt
+file
+
+
+
+
+2008-12-08T05:18:50.000000Z
+9b0036c4a96f291fa97974541c0af940
+2008-09-23T22:04:04.202975Z
+9
+esimorre@free.fr
+

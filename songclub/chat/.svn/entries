@@ -1,0 +1,130 @@
+8
+
+dir
+12
+http://django-chat.googlecode.com/svn/trunk
+http://django-chat.googlecode.com/svn
+
+
+
+2008-10-04T21:51:03.945577Z
+12
+esimorre@free.fr
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+ef3883ca-8561-11dd-ad27-0f66e57d2035
+
+chat
+dir
+
+manage.py
+file
+
+
+
+
+2008-12-08T05:18:50.000000Z
+6a027d2dba8cb130fd2f38919873eebd
+2008-09-19T17:10:22.983636Z
+2
+esimorre@free.fr
+has-props
+
+fastcgi
+dir
+
+dojango
+dir
+
+__init__.py
+file
+
+
+
+
+2008-12-08T05:18:50.000000Z
+d41d8cd98f00b204e9800998ecf8427e
+2008-09-19T17:10:22.983636Z
+2
+esimorre@free.fr
+has-props
+
+settings.py
+file
+
+
+
+
+2008-12-08T05:18:50.000000Z
+7a5bfcdfd08391e1f8a65ae69698cb2a
+2008-09-25T20:38:52.069500Z
+10
+esimorre@free.fr
+has-props
+
+browse.py
+file
+
+
+
+
+2008-12-08T05:18:50.000000Z
+5bfe5679bf47c77c9c7a5f39ca8bda05
+2008-09-19T17:10:22.983636Z
+2
+esimorre@free.fr
+has-props
+
+urls_prefix.py
+file
+
+
+
+
+2008-12-08T05:18:50.000000Z
+1438a2717fa9b02dba56913476831ac8
+2008-09-23T21:45:04.855916Z
+8
+esimorre@free.fr
+has-props
+
+backends
+dir
+
+initial_data.json
+file
+
+
+
+
+2008-12-08T05:18:50.000000Z
+83688dc435452a0a5a0ffa2541c784bb
+2008-09-23T21:45:04.855916Z
+8
+esimorre@free.fr
+
+urls.py
+file
+
+
+
+
+2008-12-08T05:18:50.000000Z
+af6c1df88d84ca8b1a78f5217287d8c6
+2008-10-04T21:51:03.945577Z
+12
+esimorre@free.fr
+has-props
+

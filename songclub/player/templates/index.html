@@ -1,0 +1,10 @@
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+{% if latest_folders %}
+  <ul>
+  {% for folder in latest_folders %}
+    <li><a href="browse/{{ folder.locationsha1 }}">{{ folder.name }}</a></li>
+  {% endfor %}
+  </ul>
+{% else %}
+  <p>No music is available.</p>
+{% endif %}

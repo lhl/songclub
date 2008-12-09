@@ -1,0 +1,54 @@
+8
+
+dir
+12
+http://django-chat.googlecode.com/svn/trunk/backends
+http://django-chat.googlecode.com/svn
+
+
+
+2008-09-21T21:04:35.372540Z
+4
+esimorre@free.fr
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+ef3883ca-8561-11dd-ad27-0f66e57d2035
+
+__init__.py
+file
+
+
+
+
+2008-12-08T05:18:50.000000Z
+d41d8cd98f00b204e9800998ecf8427e
+2008-09-19T17:10:22.983636Z
+2
+esimorre@free.fr
+has-props
+
+passgroup.py
+file
+
+
+
+
+2008-12-08T05:18:50.000000Z
+e4f75b2bc3711e5000d8a8351bead3f0
+2008-09-21T21:04:35.372540Z
+4
+esimorre@free.fr
+has-props
+
