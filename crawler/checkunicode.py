@@ -3,6 +3,8 @@
 import chardet
 from time import strftime
 
+# Dump fulllist.txt w/ 'cd /locker/music; find . > fulllist.txt'
+
 for line in open("/locker/music/fulllist.txt"):
   try:
     x = unicode(line)
