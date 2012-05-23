@@ -3,3 +3,4 @@
 *.pyc
 *.log
 *.api_keys
+ENMFP_codegen/*
