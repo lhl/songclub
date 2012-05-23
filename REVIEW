@@ -1,0 +1,63 @@
+Code to look at:
+
+indexer
+---
+https://github.com/rolanddb/mp3db
+https://github.com/desfrenes/Tags/blob/master/tags.py
+https://github.com/mdinacci/musicorganizer
+
+id3
+---
+http://www.blog.pythonlibrary.org/2010/04/22/parsing-id3-tags-from-mp3s-using-python/
+http://mathema.tician.de/software/tagpy
+
+
+manager
+---
+http://prokyon3.sourceforge.net/
+http://domo.sourceforge.net/indexhome.html
+
+streaming servers
+---
+https://github.com/thedjinn/nedna
+https://github.com/jordansissel/python-pimp
+https://github.com/ChristopherBiscardi/Node-Icecast-Streamer
+https://github.com/LeonB/py-icecream
+https://github.com/TooTallNate/NodeFloyd
+
+icecast
+---
+https://github.com/TooTallNate/node-icecast-stack
+https://github.com/houndbee/phqueue
+https://github.com/mjamroz/ices-radio-scripts
+https://github.com/mjamroz/icecast-script
+https://github.com/vext01/icefast/blob/master/icefast.py
+http://www.becrux.com/index.php?page=projects&name=icegenerator
+
+voting FE
+---
+https://github.com/agius/HackerMusic (2010)
+http://tunez.sourceforge.net/ (2004)
+http://cardhouse.com/otto/ (2002)
+http://ampache.org/
+
+python
+---
+https://github.com/jpenney/pymp3utils
+https://github.com/Skorpion9312/music-organizer
+https://github.com/dato/mp3-scripts
+
+tagging
+---
+https://github.com/ultima51x/shelltag
+
+js
+---
+https://github.com/nddrylliog/jsmad
+https://github.com/catshirt/8tab
+https://github.com/juliend2/julienMP3Player
+
+sonos
+---
+https://github.com/henkelis/sonospy
+https://github.com/jsundram/Sonar
