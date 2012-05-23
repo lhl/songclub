@@ -1,0 +1,11 @@
+2004-01-11 (version 1.3.3)
+    * configure.ac: use AC_PROG_SWIG instead of SWIG_PROG. switched to using
+    ac_pkg_swig.m4 from the autoconf macro archive, since the macro is no
+    longer included in the swig distribution
+    * autogen.sh: added. downloads swig and python macro files from autoconf
+    macro archive and configures cvs source for build
+    * taglib.i: fix to work with swig-1.3.24. was only missing %include
+    wchar.i
+
+2004-09-17 (version 1.3.1)
+    * Makefile.am: fix _TagLib.so symlink

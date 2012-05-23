@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/17/trunk/django_openidconsumer/templates
+END
+openid_signin.html
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/17/trunk/django_openidconsumer/templates/openid_signin.html
+END
+openid_failure.html
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/10/trunk/django_openidconsumer/templates/openid_failure.html
+END

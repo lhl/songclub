@@ -1,0 +1,9 @@
+{% if filelist %}
+  <ul>
+  {% for file in filelist %}
+    <li>{{ file.name }}</li>
+  {% endfor %}
+  </ul>
+{% else %}
+  <p>No files are available.</p>
+{% endif %}

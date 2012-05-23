@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 22
+/svn/!svn/ver/10/trunk
+END
+.bzrignore
+K 25
+svn:wc:ra_dav:version-url
+V 32
+/svn/!svn/ver/9/trunk/.bzrignore
+END
+views.py
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/svn/!svn/ver/10/trunk/views.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/svn/!svn/ver/10/trunk/__init__.py
+END

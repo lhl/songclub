@@ -1,0 +1,52 @@
+8
+
+dir
+17
+http://django-openid.googlecode.com/svn/trunk/django_openidconsumer/templates
+http://django-openid.googlecode.com/svn
+
+
+
+2007-05-09T19:17:47.305597Z
+17
+swillison
+has-props
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+3bcd880a-622a-0410-974b-89bbab7935c3
+
+openid_signin.html
+file
+
+
+
+
+2007-05-13T20:12:59.000000Z
+499c94f5aa141160af801382365a3bba
+2007-05-09T19:17:47.305597Z
+17
+swillison
+
+openid_failure.html
+file
+
+
+
+
+2007-05-13T20:12:59.000000Z
+6c3dde43d07cbfd6bb973b4263fad25c
+2007-04-24T00:19:51.287659Z
+10
+swillison
+

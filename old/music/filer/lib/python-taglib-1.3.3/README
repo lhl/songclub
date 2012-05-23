@@ -1,0 +1,24 @@
+
+python-taglib
+
+Summary: Python bindings for the taglib audio file tagging library.
+
+Description: If you want to tag mp3/ogg files using python, then these bindings
+will enable you to call the taglib library (written in C++) to do the job.
+
+FEATURES
+
+Current taglib features supported in bindings:
+mp3 + id3v1 & id3v2
+ogg + xiphcomment
+flac?
+more..
+
+VERSIONS
+
+We try to keep the major version number same as taglib, so python-taglib-1.3.x
+is for taglib-1.3.x.
+
+TESTED
+
+python-taglib 1.3.2 was tested with taglib 1.3.1.
