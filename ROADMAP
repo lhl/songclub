@@ -1,16 +1,37 @@
 Scanning Daemon
 ---
+Scan and insert into MongoDB songclub
 * Go through files
 * If MP3 scan ID3 data
 * UI for easily modifying items (based on folder, etc)
 
+Use
+http://packages.python.org/watchdog/
+
+Metadata
+http://mpd.wikia.com/wiki/Client:Squitcher
+
+
+http://getid3.sourceforge.net/
+http://s23.org/wiki/HowTo/Read_Mp3_ID3_tags_into_Sql_Database
 
 Streaming Server
 ---
+* icecast + python layer
+
+FE
+---
+scrobbling
+
+http://musicmachinery.com/2010/06/11/metoo-a-scrobbler-for-the-room/
+http://code.google.com/p/pylast/
+
+
 * Realtime transcoding
 * Handle multiple streams
 * Allow multiple people to stream a single stream
 * Dynamic playlist
+
 
 look at screamy, edna
 http://www.amk.ca/python/howto/sockets/
@@ -31,6 +52,36 @@ http://www.bbc.co.uk/blogs/radiolabs/2007/11/bbc_podcasts_on_the_iphone_and.shtm
 
 
 Needs to be constant bitrate and the sample needs to be a multiple of 22.1
+
+Community Radio
+- add a track
+- keep history
+  - track skips/favs, etc
+Preview
+
+
+Track owner's collections
+Track requester
+Track skips, etc
+Track listens, scrobble
+Votes
+
+
+http://domo.sourceforge.net/indexhome.html
+
+http://forums.sonos.com/showthread.php?t=14242&page=12
+
+Smart Jukeboxes
+---
+http://cardhouse.com/otto/
+http://code.google.com/p/disorder/
+https://github.com/avuserow/amp#readme
+
+
+
+Sonos
+https://github.com/henkelis/sonospy
+
 
 
 
@@ -54,6 +105,4 @@ History
 Infrastructure
 ---
 Python
-CouchDB
 jQuery
-YUI 3
