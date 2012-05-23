@@ -4,3 +4,4 @@
 *.log
 *.api_keys
 ENMFP_codegen/*
+dev/test_music/*
