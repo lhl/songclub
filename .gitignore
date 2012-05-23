@@ -2,3 +2,4 @@
 *.pickle
 *.pyc
 *.log
+*.api_keys
