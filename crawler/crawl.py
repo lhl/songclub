@@ -1,16 +1,71 @@
-#!/usr/bin/python
-
-import chardet, magic, os, re, socket, sys
-import eyeD3
-from mutagen.mp3 import MP3, HeaderNotFoundError
-from mutagen.easyid3 import EasyID3
-from mutagen.id3 import ID3NoHeaderError
-from couchdb import *
-from hashlib import *
-from pprint import pprint
-from time import sleep, strftime
+#!/usr/bin/python3
 
 '''
+Music Crawler:
+* Reads new files
+* Inserts into DB
+
+We are using Python 3 to:
+  1) Learn Python 3
+  2) Make Unicode less painful
+'''
+
+import chardet
+from   hashlib import *
+import magic
+import os
+from   pprint import pprint
+import pymongo
+import re
+import socket
+import stagger
+import sys
+import time
+from   time import sleep, strftime
+
+
+
+'''
+file {
+ location:
+ filename:
+ parent:
+ last_modified:
+ type: folder, mp3, image
+ extension: png
+ md5:
+
+ play_count: 0
+}
+
+track {
+  artist:
+}
+
+song {
+}
+
+album {
+}
+
+artist {
+}
+
+# Tracking plays
+play {
+}
+
+comment {
+}
+
+fave {
+}
+
+list {
+}
+
+
+
 TODO:
   put into functions
   check to see if it exists, update if appropriate
@@ -23,27 +78,39 @@ TODO:
   Handle KeyboardInterrupt
 '''
 
-s = Server('http://127.0.0.1:5984/')
-db = s['songclub']
-mp3re = re.compile('\.mp3$', re.IGNORECASE)
+# DB
+conn = pymongo.Connection()
+db = conn['songclub']
+
+# Globals
+dir = '/locker/music'
+mime = magic.Magic(mime=True)
+encoding = magic.Magic(mime_encoding=True)
 
 def main():
-  dir = '/locker/music'
+  for root, dirs, files in os.walk(dir):
+    # Files
+    for f in files:
+      location = root + '/' + f
+      add_location(root + '/' + f)
 
-  for root, dirs, files in os.walk(dir, topdown=False):
-    root = unicode(root, 'utf8')
+    # Folders
+    for d in dirs:
+      add_location(root + '/' + d)
 
+
+    '''
     # Folders
     for d in dirs:
       try:
         try:
-          d = unicode(d, 'utf8')
+          d = str(d, 'utf8')
         except UnicodeDecodeError:
           try:
              encoding = chardet.detect(d)['encoding']
-             d = unicode(d, encoding)
+             d = str(d, encoding)
           except UnicodeDecodeError:
-             print strftime("[%Y-%m-%d %H:%M:%S] ") + "Unicode Error, couldn't add : " + d
+             print(strftime("[%Y-%m-%d %H:%M:%S] ") + "Unicode Error, couldn't add : " + d)
              
         entry = {'proto': 'file',
                  'owner': 'lhl',
@@ -56,32 +123,32 @@ def main():
         entry['filelist'] = os.listdir(entry['location'].encode('utf8'))
 
         try:
-          entry['filelist'] = map(lambda x: unicode(x, 'utf8'), entry['filelist'])
+          entry['filelist'] = [str(x, 'utf8') for x in entry['filelist']]
         except UnicodeDecodeError:
-          print strftime("[%Y-%m-%d %H:%M:%S] ") + 'Unicode Error with: ' + entry['location']
+          print(strftime("[%Y-%m-%d %H:%M:%S] ") + 'Unicode Error with: ' + entry['location'])
 
         entry['filecount'] = len(os.listdir(entry['location'].encode('utf8')))
 
-        mp3count = len(filter(lambda x: mp3re.search(x), entry['filelist']))
+        mp3count = len([x for x in entry['filelist'] if mp3re.search(x)])
         if mp3count:
           entry['mp3count'] = mp3count
 
         addentry(entry)
 
       except:
-        print strftime("[%Y-%m-%d %H:%M:%S] ") + 'Error adding ' + entry['location'].encode('utf8') + ' ', sys.exc_info()
+        print(strftime("[%Y-%m-%d %H:%M:%S] ") + 'Error adding ' + entry['location'].encode('utf8') + ' ', sys.exc_info())
 
     # Files
     for f in files:
       try:
         try:
-          f = unicode(f, 'utf8')
+          f = str(f, 'utf8')
         except UnicodeDecodeError:
           try:
              encoding = chardet.detect(f)['encoding']
-             f = unicode(f, encoding)
+             f = str(f, encoding)
           except UnicodeDecodeError:
-             print strftime("[%Y-%m-%d %H:%M:%S] ") + "Unicode Error, couldn't add : " + f
+             print(strftime("[%Y-%m-%d %H:%M:%S] ") + "Unicode Error, couldn't add : " + f)
 
         entry = {'proto': 'file',
                  'owner': 'lhl',
@@ -99,27 +166,54 @@ def main():
         entry['sha1'] = sha1(open(entry['location'], 'rb').read()).hexdigest()
         entry['type'] = magic.from_file(entry['location'].encode('utf8'))
 
-        getID3(entry) 
+    '''
 
-        # pprint(entry)
-        # print
+def add_location(location):
+  entry = {}
+  entry['location'] = location
+  entry['encoding'] = encoding.from_file(location.encode('utf-8')).decode('utf-8')
+  entry['mime'] = mime.from_file(location.encode('utf-8')).decode('utf-8')
+  if os.path.isdir(location):
+    entry['type'] = 'folder'
+  elif os.path.isfile(location):
+    entry['type'] = 'file'
+    (root, ext) = os.path.splitext(location)
+    if ext:
+      entry['extension'] = ext[1:]
 
-        addentry(entry)
+      if ext[1:].lower() == 'mp3':
+        print(location)
+        tag = stagger.read_tag(location)
+        for t in tag.values():
+          print(t)
+        print(tag.title)
+        print(tag.comment)
+        '''
+        try:
+          tag = stagger.read_tag(location)
+          for t in tag.values():
+            print(t)
+          print(t.comment)
+        except:
+          # No tag:w
+          pass
+        '''
+        sys.exit()
+        # id3 = getID3()
 
-      except:
-        print strftime("[%Y-%m-%d %H:%M:%S] ") + 'Error adding ' + entry['location'].encode('utf8') + ' ', sys.exc_info()
+  # print(entry)
 
 
 def addentry(entry):
   try: 
     db.create(entry)
-    print strftime("[%Y-%m-%d %H:%M:%S] ") + 'Added file ' + entry['location'].encode('utf8')
+    print(strftime("[%Y-%m-%d %H:%M:%S] ") + 'Added file ' + entry['location'].encode('utf8'))
   except socket.error:
-    print strftime("[%Y-%m-%d %H:%M:%S] ") + 'Error connecting to CouchDB.  Waiting 5s and trying again... (' + entry['location'].encode('utf8') + ')'
+    print(strftime("[%Y-%m-%d %H:%M:%S] ") + 'Error connecting to CouchDB.  Waiting 5s and trying again... (' + entry['location'].encode('utf8') + ')')
     sleep(5)
     addentry(entry)
   except UnicodeDecodeError:
-    print strftime("[%Y-%m-%d %H:%M:%S] ") + 'Couldn\'t add to CouchDB. Unicode Error with: ' + entry['location']
+    print(strftime("[%Y-%m-%d %H:%M:%S] ") + 'Couldn\'t add to CouchDB. Unicode Error with: ' + entry['location'])
 
 def getID3(entry):
   # Man, Mutagen and eyeD3 both suck. And they throw exceptions like nobody's business
@@ -132,7 +226,7 @@ def getID3(entry):
     try:
       entry = eyeD3parse(entry)
     except:
-      print strftime("[%Y-%m-%d %H:%M:%S] ") + "ID3 Parsing Error: " + entry['location'].encode('utf8') + ' ', sys.exc_info()
+      print(strftime("[%Y-%m-%d %H:%M:%S] ") + "ID3 Parsing Error: " + entry['location'].encode('utf8') + ' ', sys.exc_info())
 
 def mutagenparse(entry):
   entry['mp3'] = {}
@@ -142,13 +236,13 @@ def mutagenparse(entry):
   entry['mp3']['bitrate'] = mp3.info.bitrate
 
   if mp3.tags:
-    frames = mp3.tags.keys()
+    frames = list(mp3.tags.keys())
     for key in frames:
       entry['mp3'][ key] = repr(mp3.tags[key])
 
   try:
     mp3 = EasyID3(entry['location'].encode('utf8'))
-    for key in mp3.keys():
+    for key in list(mp3.keys()):
       entry['mp3'][key] = repr(mp3[key])
   except ID3NoHeaderError:
     pass
@@ -189,13 +283,13 @@ def eyeD3parse(entry):
         entry['mp3']['publiser'] = mp3.tag.getPublisher()
 
       if mp3.tag.getDate():
-        entry['mp3']['date'] = map(lambda x: x.getDate(), mp3.tag.getDate())
+        entry['mp3']['date'] = [x.getDate() for x in mp3.tag.getDate()]
       if mp3.tag.getComments():
-        entry['mp3']['comments'] = map(lambda x: x.__unicode__(), mp3.tag.getComments())
+        entry['mp3']['comments'] = [x.__unicode__() for x in mp3.tag.getComments()]
       if mp3.tag.getLyrics():
-        entry['mp3']['lyrics'] = map(lambda x: x.__unicode__(), mp3.tag.getLyrics())
+        entry['mp3']['lyrics'] = [x.__unicode__() for x in mp3.tag.getLyrics()]
       if mp3.tag.getUserTextFrames():
-        entry['mp3']['usertext'] = map(lambda x: x.__unicode__(), mp3.tag.getUserTextFrames())
+        entry['mp3']['usertext'] = [x.__unicode__() for x in mp3.tag.getUserTextFrames()]
 
 
 if __name__ == "__main__":
