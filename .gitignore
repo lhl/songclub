@@ -2,6 +2,6 @@
 *.pickle
 *.pyc
 *.log
-*.api_keys
+*.config
 ENMFP_codegen/*
 dev/test_music/*
