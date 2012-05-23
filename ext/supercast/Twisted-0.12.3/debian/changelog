@@ -1,0 +1,77 @@
+twisted (0.12.2-1) unstable; urgency=low
+
+  * New upstream versions (many bugfixes) 
+
+ -- Moshe Zadka <moshez@debian.org>  Thu, 29 Nov 2001 08:01:23 +0200
+
+twisted (0.12.1-1) unstable; urgency=low
+
+  * New upstream version (mainly bugfixes) 
+
+ -- Moshe Zadka <moshez@debian.org>  Thu, 22 Nov 2001 09:09:14 +0200
+
+twisted (0.12.0-1) unstable; urgency=low
+
+  * New upstream version
+  * Using Python 2.1 
+
+ -- Moshe Zadka <moshez@debian.org>  Wed, 21 Nov 2001 15:17:25 +0200
+
+twisted (0.10.3-1) unstable; urgency=low
+
+  * New upstream release
+  * twisted.names, resolving internet names
+  * optimizations
+  * works with Jython too
+
+ -- Moshe Zadka <moshez@debian.org>  Sun, 30 Sep 2001 23:46:45 +0200
+
+twisted (0.10.2-1) unstable; urgency=low
+
+  * New upstream release
+  * bug fixes
+  * timeouts for client sockets 
+  * Tutorial about plugins
+  * Mail has changed API in an incompatible way
+
+ -- Moshe Zadka <moshez@debian.org>  Wed, 12 Sep 2001 23:00:59 +0300
+
+twisted (0.10.1-1) unstable; urgency=low
+
+  * New upstream release 
+  * Massive renaming in prespective broker classes
+  * web proxying
+  * TCP connection forwarding
+  * Lots of new protocols: LDAP, finger and obscure RFCs
+  * --plugin option to twistd
+  * web widgets
+  * twisted.enterprise improved a lot 
+
+ -- Moshe Zadka <moshez@debian.org>  Fri, 31 Aug 2001 06:49:00 +0300
+
+twisted (0.10.0-1) unstable; urgency=low
+
+  * New upstream release
+  * Added twisted.tap and twisted.mail to distribution
+  * Added docs about writing new twisted servers
+  * Changed mail API: now, saveMessage gets the SMTP from too
+  * Removed spurious prints from twisted.mail.mail
+  * Possible to relay mail to unknown domains via smart host
+  * tap2deb can create policy compliant Debian packages around .tap's
+  * Fixed debian/rules clean target (closes: Bug#108245)
+  * New arguments to twistd: --python, --no_save
+  * New arguments to mktap: --append
+  * twisted.tcp.Port can now change the size of the backlog from 5
+  * UDP servers now possible
+
+ -- Moshe Zadka <moshez@debian.org>  Thu,  9 Aug 2001 09:37:03 +0300
+
+twisted (0.9.4-1) unstable; urgency=low
+
+  * Initial Release. (closes: #105843)
+
+ -- Moshe Zadka <moshez@debian.org>  Thu, 26 Jul 2001 21:09:53 +0300
+
+Local variables:
+mode: debian-changelog
+End:

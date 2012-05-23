@@ -1,0 +1,149 @@
+<html><head><title>edna: [title]</title>
+<style type="text/css"><!--
+  A:link { text-decoration:none }
+  A:visited { text-decoration:none }
+  A:active { text-decoration:none }
+  A:hover { text-decoration:underline; color:#ff0000 }
+  .isnew { font-size:75%; font-style:italic; color:#008000;
+           margin-left: 2em }
+--></style>
+<!-- charset is hard-coded to UTF-8 in the code, DO NOT CHANGE! -->
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+</head><body link="#444488" alink="#884444" vlink="#444488">
+<table width="100%" bgcolor="#bbbbff" cellpadding=2>
+<tbody>
+<tr>
+  <td><font size="+2">
+[if-any links]
+  [links]
+[else]
+  <strong>edna: [title]</strong>
+[end]
+</font></td></tr></tbody></table>
+
+[if-any pictures]
+  <p>
+  [for pictures]
+    <a href="[pictures.href]"><img border="0" width="128" height="128" src="[pictures.href]"></a>
+  [end]
+  </p>
+[end]
+
+[if-any subdirs]
+  <p>
+  <table border=0 cellpadding=0 cellspacing=2 width="100%" bgcolor="#ff0000">
+  <tr><td>
+  <table border=0 cellpadding=4 cellspacing=0 width="100%" bgcolor="#eaecef">
+  <tr bgcolor="#d1d5d7"><th>Subdirectories</th></tr>
+  <tr><td>
+  [for subdirs]
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/resources/folder.png" border="0" align="top">&nbsp;<a href="[subdirs.href]allrecursive.m3u"><img src="/resources/play.png" border="0" align="top"></a>&nbsp;<a href="[subdirs.href]">[subdirs.text]</a>[subdirs.is_new]<br>
+  [end]
+  <br>
+  [if-any display-recursive]
+    &nbsp;&nbsp;<a href="allrecursive.m3u"><em>Play all songs (recursively)</em></a>
+    <br>
+    &nbsp;&nbsp;<a href="shufflerecursive.m3u"><em>Shuffle all songs (recursively)</em></a>
+  [end]
+  </td></tr></table></td></tr></table>
+  </p>
+[end]
+[if-any songs]
+  <p>
+  <table border=0 cellpadding=0 cellspacing=2 width="100%" bgcolor="#ff0000">
+  <tr><td>
+  <table border=0 cellpadding=4 cellspacing=0 width="100%" bgcolor="#eaecef">
+  <tr bgcolor="#d1d5d7"><th>Songs</th></tr>
+  <tr><td>
+<table border=1 width="100%" cellpadding=2>
+  <tr align="center" cellpadding=0 cellspacing=0 style="font-weight:bold;font-size:75%;">
+   <td>Filename</td>
+   <td>Disc</td>
+ <td>Track</td>
+ <td>Title</td>
+ <td>Artist</td>
+ <td>Composer</td>
+ <td>Album</td>
+ <td>Year</td>
+ <td>Genre</td>
+ <td>Length</td>
+ <td>Size</td>
+ <td>Bitrate</td>
+ <td>Samplerate</td>
+ <td>Mode</td>
+ <td>Mode Ext.</td>
+ <!-- <td>Newness</td> -->
+ </tr>
+
+  [for songs]
+ <tr align="right" style="font-size:75%;font-family:sans-serif;">
+ <td align="left" nowrap><a href="[songs.href]"><img src="/resources/save.png" border="0" align="top"></a>&nbsp;<a href="[songs.href].m3u"><img src="/resources/play.png" border="0" align="top">&nbsp;[songs.text]</a></td>
+ <td>[songs.info.disc]</td>
+ <td>[songs.info.track]</td>
+ <td align="left">[songs.info.title]</td>
+ <td align="left">[songs.info.artist]</td>
+ <td align="left">[songs.info.composer]</td>
+ <td align="left">[songs.info.album]</td>
+ <td>[songs.info.year]</td>
+ <td align="left">[songs.info.genre]</td>
+ <td>[songs.info.duration] </td>
+ <td>[songs.info.filesize] MB</td>
+ <td>[songs.info.bitrate] kbps</td>
+ <td>[songs.info.samplerate] kHz</td>
+ <td align="center">[songs.info.mode]</td>
+ <td align="center">[songs.info.mode_extension]</td>
+      <!-- <td>[songs.is_new]</a></td> -->
+    </tr>
+  [end]
+  </table>
+  <a href="all.m3u"><em>Play all songs</em></a> - <a href="all.zip">[[]<em>ZIP</em>]</a>
+  <br>
+  <a href="shuffle.m3u"><em>Shuffle all songs</em></a>
+  </td></tr></table></td></tr></table>
+  </p>
+[end]
+
+[if-any playlists]
+  <p>
+  <table border=0 cellpadding=0 cellspacing=2 width="100%" bgcolor="#ff0000">
+  <tr><td>
+  <table border=0 cellpadding=4 cellspacing=0 width="100%" bgcolor="#eaecef">
+  <tr bgcolor="#d1d5d7"><th>Playlists</th></tr>
+  <tr><td>
+  [for playlists]
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="[playlists.href]"><img src="/resources/play.png" border="0" align="top">&nbsp;[playlists.text]</a>[playlists.is_new]<br>
+  [end]
+  </td></tr></table></td></tr></table>
+  </p>
+[end]
+
+[if-any plainfiles]
+  <p>
+  <table border=0 cellpadding=0 cellspacing=2 width="100%" bgcolor="#ff0000">
+  <tr><td>
+  <table border=0 cellpadding=4 cellspacing=0 width="100%" bgcolor="#eaecef">
+  <tr bgcolor="#d1d5d7"><th>Files</th></tr>
+  <tr><td>
+  [for plainfiles]
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="[plainfiles.href]"><img src="/resources/text.png" border="0" align="top">&nbsp;[plainfiles.text]</a>[plainfiles.is_new]<br>
+  [end]
+  </td></tr></table></td><!/tr></table>
+  </p>
+  <p>
+  </p>
+[end]
+
+[if-any subdirs]
+[else][if-any songs]
+[else][if-any playlists]
+[else][if-any plainfiles]
+[else]
+<i>Empty directory</i>
+[end][end][end]
+
+<hr noshade>
+<table width="100%" border=0 cellpadding=0 cellspacing=0><tr>
+<td>Powered by <a href="http://edna.sourceforge.net/">edna</a></td>
+<td align=right><a href="/stats/">Server statistics</a></td>
+</tr></table>
+</body></html>

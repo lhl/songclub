@@ -1,0 +1,167 @@
+Supercast is a SHOUTcast-compatible streaming MP3 audio server.
+Its most distinguishing feature is its ability to re-encode the
+source stream at one or more other bit rates and broadcast the
+resulting stream(s) along with the original.  This makes it easier
+to simultaneously broadcast high-bandwidth and low-bandwidth streams
+with the same content.  Another benefit over SHOUTcast is that
+Supercast is compatible with Windows Media Player.
+
+Supercast will probably run on any recent Unix-like operating
+system; it has been tested under Linux (Debian 2.2 and Red Hat 6.1)
+and FreeBSD 4.4.  Windows is not yet supported.  It is written in
+the Python programming language (http://www.python.org/) and also
+requires the Twisted Python networking library
+(http://www.twistedmatrix.com/), version 0.12.3.  Unpack the
+Twisted-0.12.3.tar.gz file in either the Supercast root directory
+or the directory above it, whichever you prefer.  Alternatively,
+you can install the Twisted library system-wide using the included
+setup script.  You must also have the LAME MP3 encoder
+(http://www.mp3dev.org/mp3/) to take advantage of Supercast's
+re-encoding feature.
+
+Once you have satisfied the prerequisites, you need to configure
+Supercast.  It's simple to configure Supercast as a single server
+with no re-encoding (like SHOUTcast), a pair of servers (one
+broadcasting the original stream and one broadcasting a stream that
+has been re-encoded for modem users), or even a group of three
+servers (where the third one broadcasts a re-encoded stream at a
+medium bit rate).  In any of these cases, simply copy supercast.conf.dist
+to supercast.conf (or an alternative configuration file) and make
+the appropriate changes.  THe available parameters are as follows:
+
+mainPort:  This is the port to which listeners connect to hear the
+broadband stream.
+
+mainMaxListeners:  This is the maximum number of listeners that
+can be connected to the main server; it is 32 by default.
+
+sourcePort:  This is the port to which all broadcasters connect.  It
+defaults to mainPort + 1, and this is the best setting, because the
+port number that SHOUTcast plug-in users will enter is actually one
+less than the port to which the SHOUTcast plug-in connects.
+
+sourcePassword:  This is the password which broadcasters use to
+connect to the server.  Change it.
+
+titleFile:  If specified, this is the name of a file to which the
+title of the source stream is written when a broadcaster connects
+to the server and to which "Off the Air" is written when the stream
+is done.  This feature can be used to display the current stream
+title on a dynamically-generated Web page.  No title file is written
+by default.
+
+modemPort:  If this port is specified, then the source stream will
+be re-encoded at 24 Kbps in mono at a sample rate of 22 kHz, and
+listeners can connect to this port to hear it.  No one can broadcast
+directly to this server.  If this parameter is omitted, then no
+low-bandwidth stream is produced.
+
+modemMaxListeners:  This is the maximum number of listeners that
+can be connected to the modem server, if any; it is 32 by default.
+
+mediumPort:  If this port is specified, then the source stream will
+be re-encoded at a certain bit rate (see mediumBitRate below) in
+stereo at a sample rate of 22 kHz, and listeners can connect to
+this port to hear it.  As with the server on modemPort, no one can
+broadcast directly to this server.  If this parameter is omitted,
+then no medium-bandwidth stream is produced.
+
+mediumBitRate:  This is the bit rate (given as a number in kilobits)
+at which the medium-bandwidth stream should be encoded.  The default
+is 64 Kbps.
+
+mediumMaxListeners:  This is the maximum number of listeners that
+can be connected to the medium-bandwidth server, if any; it is 32
+by default.
+
+adminPort:  If specified, this is the port to which server
+administrators and developers connect (using a Telnet client).
+
+adminPassword:  This is the password for the Telnet interface
+described above.  Change it!
+
+pidFile:  This parameter specifies the name of the file to which
+Supercast will write its process ID (PID) when it starts.  By
+default it is "supercast.pid".
+
+interface:  This is the IP address on which Supercast should listen
+for incoming connections.  It must be written in quotes.  If this
+parameter is not provided, then Supercast will listen on all IP
+addresses that belong to this system.
+
+Supercast can also rebroadcast one or both of the streams to another
+SHOUTcast-compatible server.  This is useful if you want to take
+advantage of Supercast's dual-bandwidth streaming but don't have
+enough bandwidth on your server to support many listeners; you can
+use a service such as Live365.com or StreamGuys.com to serve your
+listeners.
+
+For this purpose there are three optional configuration parameters,
+mainRelay, modemRelay, and mediumRelay, each of which has three
+comma-delimited parts in its value:  the relay server's host name
+or IP address (in quotes), the relay port (NOT in quotes; this is
+the actual broadcasting port which is the listeners' port plus
+one), and the password for the relay server (in quotes).
+
+SHOUTcast-compatible servers can often be configured to run in
+relay mode, in which the server relaying the stream connects to
+the originating server as a listener.  The disadvantaeg of this
+approach is that when there is no active stream, the relay server
+must repeatedly try to connect to the originating server.  If it
+tries too often, it wastes system resources and bandwidth, but if
+it doesn't try often enough, it doesn't pick up the beginning of
+the stream.  Therefore, whenever possible, don't run the relay
+server in relay mode and use Supercast's relay feature instead.
+
+If you want to use Supercast for a purpose other than those documented
+here, then you'll need to modify the start script.  For example,
+you can run multiple, separate servers in the same Supercast process.
+I'm doing it now and will try to make this arrangement more convenient
+to set up in the future.
+
+Once you have configured Supercast, you can start it by changing
+to the Supercast root directory and running the start script.  The
+server should then be ready for broadcasting.  The easiest way to
+shut down the server is to run the stop script in the Supercast
+directory.  If you want to use a configuration file other than
+supercast.conf, then include its name on the command line when
+running the start and stop scripts.
+
+Supercast implements basic statistics about the listening time and
+bandwidth consumption for each server.  You can view this information
+in a Web browser.  For example, if the broadband server is on port
+8000 of the local machine, you can view the statistics by going to
+this URL:
+
+http://localhost:8000/index.html
+
+Note that in either of the multiple-bandwidth configurations, the
+statistics for the broadband, medium-bandwidth, and modem servers
+are completely separate.  All statistics are lost when the server
+is shut down and are never reset while it's running; I hope to
+address these limitations in the future.
+
+The Telnet interface to the server is very primitive.  After logging
+in with username "admin" and the password specified in the
+configuration file, one enters lines of Python code to be run in
+the server process.  Using the interface effectively requires
+familiarity with Python, the Twisted library, and the Supercast
+code, so it's probably only suitable for developers.  Sometime I'll
+write a nice Web-based administration interface.
+
+I developed Supercast specifically for ACB Radio
+(http://www.acbradio.org/), a group of Internet audios treams
+operated by the American Council of the Blind with help from many
+other blind and visually-impaired people.  Supercast is in production
+use now on ACB Radio Interactive (http://interactive.acbradio.org/).
+Thanks to the rest of the ACB Radio Interactive team for helping
+me test the server throughout its development, and even for helping
+me name the software.  Be sure to listen to ACB Radio Interactive
+for live, unpredictable Internet radio by the blind, for the world!
+
+Supercast is certainly not finished yet; I've mentioned already a
+few improvements which I hope to make sometime soon.  It also needs
+to be able to list the streams that it broadcasts on directories
+such as yp.shoutcast.com and yp.live365.com.  An integrated facility
+for automatically broadcasting pre-recorded material may also be
+helpful.

@@ -1,0 +1,16 @@
+mainPort = 8000
+sourcePassword = "ChangeMe"
+modemPort = 8002
+# mediumPort = 8004
+# mediumBitRate = 64
+adminPort = 8023
+adminPassword = "ChangeMe!"
+# mainRelay = "host", port, "password"
+# modemRelay = "host", port, "password"
+# mediumRelay = "host", port, "password"
+# mainMaxListeners = 32
+# modemMaxListeners = 32
+# mediumMaxListeners = 32
+# titleFile = "title.txt"
+# pidFile = "supercast.pid"
+# interface = "ip"

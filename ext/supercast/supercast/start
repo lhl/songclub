@@ -1,0 +1,91 @@
+#!/usr/bin/env python
+import os, os.path, sys
+
+sourcePort = mainRelay = modemRelay = modemStreamInfo = adminPort = None
+mainMaxListeners = modemMaxListeners = titleFile = modemPort = None
+mediumPort = mediumBitRate = mediumRelay = mediumStreamInfo = mediumMaxListeners = None
+interface = ""
+pidFile = "supercast.pid"
+
+if len(sys.argv) > 1:
+   execfile(sys.argv[1])
+elif os.path.exists("supercast.conf"):
+    execfile("supercast.conf")
+else:
+    print "start: no configuration file found"
+    sys.exit()
+
+if not sourcePort:
+    sourcePort = mainPort + 1
+
+if mediumPort and not mediumBitRate:
+    mediumBitRate = "64"
+
+if os.path.exists("Twisted-0.12.3"):
+    sys.path.insert(0, os.path.abspath("Twisted-0.12.3"))
+elif os.path.exists("../Twisted-0.12.3"):
+    sys.path.insert(0, os.path.abspath("../Twisted-0.12.3"))
+
+import supercast, relay
+from twisted.internet import main, tcp
+from twisted.protocols import telnet
+from twisted.python import log
+
+log.startLogging(open("supercast.log", "w"))
+app = main.Application("supercast")
+app.mainServer = supercast.HTTPServer(mainPort)
+
+if mainRelay:
+    apply(relay.TCPRelay, (app.mainServer,) + mainRelay)
+
+if mainMaxListeners:
+    app.mainServer.maxClients = mainMaxListeners
+
+if modemPort:
+    app.modemServer = supercast.HTTPServer(modemPort)
+
+    if modemRelay:
+        apply(relay.TCPRelay, (app.modemServer,) + modemRelay)
+
+    if modemMaxListeners:
+        app.modemServer.maxClients = modemMaxListeners
+
+    relay.ReencodingRelay(app.mainServer, app.modemServer, "24", "m", "22050")
+    app.addPort(tcp.Port(modemPort, app.modemServer, 5, interface))
+
+if mediumPort:
+    app.mediumServer = supercast.HTTPServer(mediumPort)
+
+    if mediumRelay:
+        apply(relay.TCPRelay, (app.mediumServer,) + mediumRelay)
+
+    if mediumMaxListeners:
+        app.mediumServer.maxClients = mediumMaxListeners
+
+    relay.ReencodingRelay(app.mainServer, app.mediumServer, str(mediumBitRate), "j", "22050")
+    app.addPort(tcp.Port(mediumPort, app.mediumServer, 5, interface))
+
+app.addPort(tcp.Port(mainPort, app.mainServer, 5, interface))
+app.sourceFactory = supercast.SourceFactory(app.mainServer, sourcePassword,
+                                            titleFile)
+app.addPort(tcp.Port(sourcePort, app.sourceFactory, 5, interface))
+
+if adminPort:
+    app.telnetServer = telnet.ShellFactory()
+    app.telnetServer.password = adminPassword
+    app.telnetServer.namespace["app"] = app
+    app.addPort(tcp.Port(adminPort, app.telnetServer, 5, interface))
+
+app.addDelayed(supercast.sched)
+
+if os.fork() != 0:
+    sys.exit()
+
+os.close(0)
+os.close(1)
+os.close(2)
+os.setsid()
+pidFile = open(pidFile, "w")
+pidFile.write(`os.getpid()` + "\n")
+pidFile.close()
+app.run(0)

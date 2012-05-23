@@ -1,0 +1,7 @@
+Matt Campbell <matt@acbradio.org> is the primary developer of
+Supercast and is the one to contact with questions, suggestions,
+bug reports, contributions of code, or other feedback.
+
+Thanks to Stuart Low <thedude@perlboy.org> for implementing support
+for multiple config files and a configurable PID file in the start
+and stop scripts.

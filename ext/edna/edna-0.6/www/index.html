@@ -1,0 +1,250 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>edna -- an MP3 server</title>
+    <style type="text/css"><!--
+      .edna {
+        COLOR: #B00000;
+      }
+    --></style>
+  </head>
+
+  <body background="images/chalk.jpg">
+
+    <table width="100&#37;" cellspacing=5>
+      <tr>
+	<td>
+	  <h1>edna -- an MP3 server</h1>
+	</td>
+	<td align=center valign=top bgcolor="white" width="1%">
+	  <b>Quickstart:</b>
+	  <a href="http://sourceforge.net/project/showfiles.php?group_id=18761">download</a>
+	</td>
+	<td width="1%"><a href="http://sourceforge.net/"><img border=0
+	      src="http://sourceforge.net/sflogo.php?group_id=18761&type=1"></a><br><a href="http://sourceforge.net/projects/edna/"><span class="edna">edna</span>&nbsp;project&nbsp;page</a>
+	</td>
+      </tr>
+    </table>
+
+    <p>
+      <span class="edna">edna</span> is a quick hack that I put
+      together, based on ideas from my friend,
+      <a href="http://www.cybersnot.com/"><i>Geoff Elliott</i></a>.
+      He had written a program named ampRadio that operates much like
+      <span class="edna">edna</span> -- serving up HTML pages with
+      links to MP3 files, and then serving out those MP3s.
+    </p>
+
+    <hr width="80&37;">
+    <h2>What is <span class="edna">edna</span>?</h2>
+    <p>
+      <span class="edna">edna</span> allows you to access your MP3
+      collection from any networked computer.  This software streams
+      your MP3s via HTTP to any MP3 player that supports playing off a
+      remote connection (e.g. Winamp, FreeAmp, Sonique, XMMS, WMP).
+    </p>
+    <p>
+      <span class="edna">edna</span> supports:
+    </p>
+    <ul>
+      <li>Browsing your music collection from a remote computer.</li>
+      <li>URL support to allow people to stream specific songs.</li>
+      <li>
+	Automatic playlist construction for entire directories of
+	songs, including a "shuffle" ability.
+      </li>
+      <li>
+	The merging of multiple music collections while keeping the
+	files on the remote computer.
+      </li>
+    </ul>
+
+    <p>
+      While any silly web server can do this (serve up MP3s), there
+      are two cool features about <span class="edna">edna</span>:
+    </p>
+    <ul>
+      <li>
+	The pages are dynamically constructed, adjusting to directory
+	structure and the files in those directories.  This is much
+	nicer than using simple directory indexing. While the dynamic
+	file list could be done with various CGI or PHP-like tools,
+	the dynamic directories would be a lot harder.
+      </li>
+      <li>
+	This is the coolest part... Rather than directly serving up an
+	MP3, the software serves up a <em>playlist</em>. This gets
+	passed to your player (e.g. WinAmp) which turns around with an
+	HTTP request to <em>stream</em> the MP3. I must give credit to
+	Geoff for this one :-)
+      </li>
+    </ul>
+
+    <p>
+      When constructing a page for a directory,
+      <span class="edna">edna</span> will list all subdirectories, MP3
+      song files (.mp3 extensions), playlists (.m3u extensions),
+      certain other types of music and video files (such as .wav), and
+      images. All other files will be ignored.
+    </p>
+    <p>
+      <span class="edna">edna</span> can automatically create play
+      lists for individual directories of songs, and all directories
+      recursively. These lists can also be shuffled (by
+      <span class="edna">edna</span>, rather than your player).
+    </p>
+    <p>
+      Your MP3 player must be able to recognize .m3u files, and your
+      browser must know to pass .m3u files to your player. Your player
+      must be capable of handling URLs within a playlist. I've tested
+      this with WinAmp, which definitely meets these needs.
+    </p>
+
+    <hr align=left width="30&#37;">
+    <h2>Where to get it?</h2>
+    <p>
+      The latest <span class="edna">edna</span> is currently labeled as
+      <em>version 0.6</em> because there are still a few more features
+      that I would like to add. It is <em>very</em> stable and can be
+      used (now) without a problem.
+
+    <p>
+      <span class="edna">edna</span> is licensed under the
+      <a href="http://www.fsf.org/copyleft/gpl.html"><i>GPL</i></a>.
+      It is a small
+      <a href="http://www.python.org/"><i>Python</i></a> script. At
+      the moment, it is about 1000 lines (version 0.1
+      was only 250!). You can get the source from the
+      <a href="http://sourceforge.net/project/showfiles.php?group_id=18761">distribution</a>.
+    </p>
+
+    <dl>
+      <dt><strong>edna CVS information</strong></dt>
+      <dd>
+	<span class="edna">edna</span> is checked into
+	<a href="http://sourceforge.net/cvs/?group_id=18761">a CVS repository</a> and is also
+	available for <a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/edna/">viewing
+	  with your web browser</a>. You can sign up on the
+	<a href="http://mailman.lyra.org/mailman/listinfo/edna-checkins"><i>edna-checkins
+	  mailing list</i></a>
+	to receive notifications of changes to the CVS repository.
+      </dd>
+    </dl>
+
+    <hr align=left width="30&#37;">
+    <h2>Installation and Use</h2>
+    <p>
+      The server should work for any platform. I've tested it on
+      Linux and Windows. I've been using Internet Explorer and WinAmp
+      (on Windows) to navigate the pages and play the files.
+    </p>
+    <p>
+      Using <span class="edna">edna</span> is boringly simple. Make
+      sure you have (at least) Python 1.5.2 installed on your
+      system. Edit the <code>edna.conf</code> file with your
+      setup. This is simple to do, as all you need to tell it is:
+    </p>
+    <ul>
+      <li>what port to run on</li>
+      <li>the directories for your MP3 files</li>
+      <li>optionally, how to log requests</li>
+    </ul>
+    <p>
+      Then, simply run <code>edna.py</code>. This can be done using:
+    </p>
+    <blockquote>
+      <code>% python edna.py</code>
+    </blockquote>
+
+    <p>
+      It will then go into an infinite loop, serving up pages and
+      files. Hit ctrl-C to stop it.
+    </p>
+
+    <h3>Running as an NT Service</h3>
+    <p>
+      Starting with edna 0.4, it is now possible to use
+      <span class="edna">edna</span> as an NT Service (thanks to Bill
+      Tutt). You will need the
+      <a href="http://www.ActiveState.com/Products/ActivePython/win32all.html"><i>most
+	recent Python/Win32 extensions</i></a>,
+      and have NT 4.0 or Windows 2000 for this code to work.
+    </p>
+    <p>
+      The NT Service scripts are in the <code>ntsvc</code>
+      subdirectory of the distribution. Change to that directory to
+      install or remove the <span class="edna">edna</span> service.
+    </p>
+    <dl>
+      <dt><strong>Installation</strong></dt>
+      <dd>
+	<code>python ednaNTSvc.py -c <var>C:/path/to/edna.conf</var> --startup auto install</code>
+	<p></p>
+      </dd>
+      <dt><strong>Removal</strong></dt>
+      <dd>
+	<code>python ednaNTSvc.py remove</code>
+	<p></p>
+      </dd>
+      <dt><strong>Usage string output from ednaNTSvc.py</strong></dt>
+      <dd>
+	<small>
+	  <pre>Usage: 'ednaNTSvc.py [options] install|update|remove|start [...]|stop|restart [...]|debug [...]' 
+Options for 'install' and 'update' commands only:
+ --username domain\username : The Username the service is to run under
+ --password password : The password for the username
+ --startup [manual|auto|disabled] : How the service starts, default = manual
+</pre>
+	</small>
+      </dd>
+    </dl>
+
+    <h3>Starting edna from sysvinit scripts</h3>
+    <p>
+       Check the included makefile and adjust the installation paths.
+       The script will run edna on startup.
+    </p>
+
+    <hr align=left width="30&#37;">
+    <h2>Modifications</h2>
+    <p>
+      If you don't like the HTML it generates, then look at template
+      files in the <code>templates</code> subdirectory. It should be
+      quite apparent how to make your changes.
+    </p>
+    <p>
+      I'm quite willing to accept patches or other fixes. Just
+      email them to the edna mailing list at
+      <a href="mailto:edna@lyra.org">edna@lyra.org</a>.
+    </p>
+
+    <h3>Thanks</h3>
+    <p>
+      I'd like to thank the following people for their contributions
+      to the edna server:
+    </p>
+    <ul>
+      <li>Matteo Bertini: quick navigation links</li>
+      <li>Steve Davis: init scripts</li>
+      <li>Dieter Deyke: image display and playlist rewriting</li>
+      <li>Jeffrey Griffith: server statistics, edna client, web design</li>
+      <li>Christophe Kalt: Unicode pages, ZIP support, fixes, releases</li>
+      <li>Stephen Kennedy: skipping the top-level directory, skip
+	".foo" directories</li>
+      <li>Erno Kuusela: access control</li>
+      <li>Andy Lowe: recursive play lists</li>
+      <li>"Lord Satan": Python 1.6 and later compatibility</li>
+      <li>PK Shiu: the "is new" feature</li>
+      <li>Shaw Terwilliger: support for serving icons, text files</li>
+      <li>Bill Tutt: NT Service ability, shuffle play, multiple file
+	extensions (and more)</li>
+      <li>"vivake": XML output and extended MP3 info</li>
+      <li>Joe Ward: UI improvements</li>
+      <li>Dave Williams: watch out for single-letter directories</li>
+      <li>Kristian Kvilekval: bug fixes, page caching, releases, unix daemon mode</li>
+    </ul>
+
+    <hr>
+    <address><a href="mailto:gstein@lyra.org">Greg Stein</a></address>
+  </body>
+</html>

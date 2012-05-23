@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<edna>
+
+[if-any pictures]
+  [for pictures]
+    <picture>
+      <href>[pictures.href]</href>
+    </picture>
+  [end]
+[end]
+
+[if-any subdirs]
+  [for subdirs]
+    <subdirectory>
+      <href>[subdirs.href]</href>
+      <text>[subdirs.text]</text>
+    </subdirectory>
+  [end]
+  [if-any display-recursive]
+    <playlist>
+      <href>allrecursive.m3u</href>
+      <text>Play all songs (recursively)</text>
+    </playlist>
+    <playlist>
+      <href>shufflerecursive.m3u</href>
+      <text>Shuffle all songs (recursively)</text>
+    </playlist>
+  [end]
+[end]
+
+[if-any songs]
+  [for songs]
+    <song>
+      <href>[songs.href].m3u</href>
+      <text>[songs.text]</text>
+
+  [# possibly use if-any on each of these before inserting element ]
+      <content-length>[songs.info.filesize]</content-length>
+      <mpeg-version>[songs.info.mpeg_version]</mpeg-version>
+      <layer>[songs.info.layer]</layer>
+      <bit-rate>[songs.info.bitrate]</bit-rate>
+      <sample-rate>[songs.info.samplerate]</sample-rate>
+      <frame-length>[songs.info.framelength]</frame-length>
+      <samples-per-frame>[songs.info.samplesperframe]</samples-per-frame>
+      <length>[songs.info.length]</length>
+      <duration>[songs.info.duration]</duration>
+      <title>[songs.info.title]</title>
+      <artist>[songs.info.artist]</artist>
+      <album>[songs.info.album]</album>
+      <year>[songs.info.year]</year>
+      <track>[songs.info.track]</track>
+      <comment>[songs.info.comment]</comment>
+      <genre>[songs.info.genre]</genre>
+    </song>
+  [end]
+  [if-any display-recursive]
+    <playlist>
+      <href>all.m3u</href>
+      <text>Play all songs</text>
+    </playlist>
+    <playlist>
+      <href>shuffle.m3u</href>
+      <text>Shuffle all songs</text>
+    </playlist>
+  [end]
+[end]
+
+[if-any plainfiles]
+  [for plainfiles]
+    <plainfile>
+      <href>[plainfiles.href]</href>
+      <text>[plainfiles.text]</text>
+    </plainfile>
+  [end]
+[end]
+
+[if-any playlists]
+  [for playlists]
+    <playlist>
+      <href>[playlists.href]</href>
+      <text>[playlists.text]</text>
+    </playlist>
+  [end]
+[end]
+
+</edna>

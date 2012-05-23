@@ -1,0 +1,336 @@
+<HTML><HEAD><TITLE>Writing Servers in Twisted</TITLE></HEAD></BODY>
+
+<H1>Writing Servers in Twisted</H1>
+
+<H2>Concepts</H2>
+
+Twisted is an async framework, so remember that none of your code can
+block. You'll get notified about new data coming in, you'll write small
+functions which deal with it and end so something else can do its thing.
+
+A Twisted server consists of several parts:
+
+<DL>
+<DT>twisted.main.Application</DT>
+<DD>This class is Twisted's connection to the world. Usually, most writers
+    do not deal with it (see below, on deployment considerations).</DD>
+
+<DT>twisted.protocols.protocol.Factory</DT>
+<DD>90% of the time, this class will be good enough. This class seats
+    inside an application, listens to a port, and builds a protocol for
+    each new connection. The default buildProtocol calls the attribute
+    "protocol" (which is usually a class), and then initializes the
+    "factory" attribute. Overriding buildProtocol is easy: just return
+    something which follows the protocol interface.</DD>
+
+<DT>twisted.protocols.protocol.Protocol</DT>
+<DD>While there is no need to derive from this class to write a protocol
+    handler, it usually makes your work easier. The next section will deal
+    with writing a new protocol, since this is where most of your code will
+    be.</DD>
+
+</DL>
+
+<H2>Writing protocols</H2>
+
+The protocol interface has several methods:
+
+<DL>
+<DT>def makeConnection(self, transport, server = None)</DT>
+<DD>This method is already implemented inside 
+    twisted.protocols.protocol.Protocol. It will initialize your protocol
+    with the "connected", "transport" and "server" attributes, and call
+    "connectionMade". If you want to do connection-specific initializing,
+    the right way to do it is to implement "connectionMade".</DD>
+
+<DT>def connectionMade(self)</DT>
+<DD>Called when a connection to the server has been established. Here you
+    should set up attributes, send greetings and similar things.
+    <P>
+    Note that for "clientish" connections, you will probably want to send
+    the initial request to the server here, unless the server sends a greeting,
+    in which case you would set up a callback to the greeting.</DD>
+
+<DT>def dataReceived(self, data)</DT>
+<DD>The protocol's raison d'etre: some data was sent by the other side.
+    You will probably want to handle it in some way.
+    <P>
+    There are a couple of Protocol derived classes which override this
+    method to provide a higher level view of the data - netstrings,
+    lines and length-prefixed messages.</DD>
+
+<DT>def connectionLost(self)</DT>
+<DD>The low-level connection is lost. Clean up after yourself.</DD>
+
+<DT>def connectionFailed(self)</DT>
+<DD>The connection cannot be made. This will only be called on client
+    protocols.</DD>
+
+</DL>
+
+<H2>Transports</H2>
+
+<P>
+One of the most important instance variables of the Protocol class is 
+"transport", which must follow the transport interface. This is what
+lets protocol classes talk to the world.
+</P>
+
+<P>
+Transports have the following methods:
+
+<DL>
+<DT>.write(data)</DT>
+<DD>Write the data when next the connection is available for writing.
+    This method will never block, but it might not send the data right
+    away.</DD>
+
+<DT>.loseConnection()</DT>
+<DD>When there is no more pending data to write, close the connection
+    down.</DD>
+
+<DT>.getPeer()</DT>
+<DD>Returns a tuple. The first element of the tuple is a string describing
+    the kind of the transport, with 'INET' being the identifier of good
+    old TCP sockets.</DD>
+</DL>
+
+<H2>Writing New Transport Types</H2>
+
+<P>
+I will concentrate here on server transports.
+<P>
+
+<P>
+Writing a transport type is usually a two-step procedure. First, you
+will need to write the port-like class. The class's constructor should
+take, among other transport-specific administrative data (for example,
+for TCP ports this could be the numeric port and the addresses to listen
+on), a factory. The only thing that should be assumed by the class
+is that the given factory has a .buildProtocol method which creates
+protocol-interface class.
+</P>
+
+<P>
+This class should be pickle-safe, which means any process specific
+information (such as open files) should be thrown out by the __getstate__
+method.
+</P>
+
+<P>
+The class should have a .startListening() method, which should take whatever
+action it needs to open a port for listening. It should also have a 
+.fileno method, which will return a valid file descriptor. When this
+file descriptor is valid for reading, the .doRead method will be called.
+Usually, this method will create a transport, call the factory's
+.buildProtocol and call .makeConnection on the protocol with the transport
+as an argument.
+</P>
+
+<P>
+The transports written for every connection and passed to protocols' 
+.makeConnection must follow the transport interface:
+</P>
+
+<DL>
+<DT>.write(data)</DT>
+<DD>Queue some data to write. Do not block.</DD>
+
+<DT>.loseConnection()</DT>
+<DD>When there will be no more data to write, close down
+the connection.</DD>
+
+<DT>.getPeer()</DT>
+<DD>Return a tuple describing your peer. This should be a tuple -
+(TYPE, ...), where the ... depend on your connection's semantics.
+Use common sense. So far, for files, it is ('file', filename), for
+TCP sockets it is ('INET', address, port) and for UNIX-domain
+sockets it is ('UNIX', path). You can probably count on 'INET6'
+being IPv6 TCP sockets.</DD>
+</DL>
+
+<P>In addition, the select loop will call the following methods:</P>
+
+<DL>
+<DT>.doWrite()</DT>
+<DD>Flush the data you have, in a non-blocking manner.</DD>
+
+<DT>.doRead()</DT>
+<DD>Read data, and call the protocol's .dataReceived method with
+this chunk.</DD>
+
+<DT>.connectionLost()</DT>
+<DD>If either .doRead() or .doWrite() return CONNECTION_LOST,
+this method will be called by the select loop. It should clean
+up any OS-level resources, and call the protocol's .connectionLost()</DD>
+
+</DL>
+
+<P>
+
+
+<H2>Deployment</H2>
+
+Most protocols are deployed using the "tap" mechanism, which hides many
+none interesting details. Tap-based deployment works by writing a module
+in the twisted.tap package which is compatible to the tap interface:
+
+<DL>
+
+<DT>The Options class</DT>
+<DD>This should inherit from twised.python.usage.Options and handle valid 
+    options.
+    It must be called Options. The next section will deal with
+    writing Option classes.</DD>
+
+<DT>The usage_message string</DT>
+<DD>This should be a helpful multiline message which would be displayed
+    when the user asks for help.</DD>
+
+<DT>The getPorts(app, config) function</DT>
+<DD>The function gets a twisted.main.Application and an instance of
+    the Options class defined, and should return an array of two-tuples
+    (port, Factory). See next section about how to get the command-line
+    options from an Option instance.</DD>
+
+</DL>
+
+<H2>Writing Option Class</H2>
+
+<DL>
+
+<DT>optStrings</DT>
+<DD>This is a list of 3-lists, each should be [long_name, flag, default].
+    <P>
+    This will set the "long_name" attribute to the value of that option,
+    or to default, if it was not be given on the command line.</DD>
+
+<DT>optFlags</DT>
+<DD>This is a list of 2-lists, each should be [long_name, flag].
+    <P>
+    This will set the "long_name" attribute to 1 if it was given on the
+    command line, else to 0.</DD>
+
+<DT>opt_* methods</DT>
+<DD>If the method takes no arguments (except from self), it will be
+    called once for every time the part after the "opt_" is given.<P>
+    If it takes one argument, then it will be the value for the option
+    given on the command line.<P>
+    opt_* methods are called in the order the arguments are given on
+    the command line.</DD>
+
+</DL>
+
+<H2>Finishing Touches</H2>
+
+OK.
+<P>
+You have written a protocol, a factory, a twisted.tap submodule which
+parses command line options and returns a valid value from getPorts.
+What now?
+<P>
+<OL>
+<LI>Run "mktap &lt;your twisted.tap submodule> &lt;valid options>". This will
+    create a file named "&lt;your twisted.tap submodule>.tap", which is a
+    pickle containing a twisted.main.Application.</LI>
+<LI>Run "twistd -f &lt;your twisted.tap.submodule>.tap". twistd knows to turn
+    pickled twisted.main.Application into a living, breathing application.
+    Some common arguments are "-l &lt;logfile>" and "-n" (no daemonize).</LI>
+</OL>
+
+<P>
+That is it. You have written a twisted server.
+
+<H2>Post-finishing Touches</H2>
+
+<P>
+So, you are happily running a twisted server via twistd, when suddenly,
+you wish you could add another HTTP server running on port 833. Or maybe
+you want your living HTTP server to become virtual-domains based. What
+are you going to do?
+</P>
+
+<P>
+Well, you have several options.
+</P>
+
+<STRONG>Warning: some of this stuff assumes a 0.9.6 or later version
+of twisted. If you are running an older version, you should upgrade</STRONG>
+
+<P>
+To add another HTTP server to your tap, just use mktap's --append option.
+Note how that does not require support in the twisted.tap.whatever
+module, so it will just work even for your newly written protocol.
+</P>
+
+<P>
+Changing the HTTP is a bit more complicated. What you will certainly
+want to do is add a telnet server to your tap. Just use "mktap --append telnet".
+It is recommended to give the username/password arguments and not use
+the defaults, for obvious reasons.
+</P>
+
+<P>
+Now that you have the telnet server, you can just telnet into your
+application and change things there on the run.
+</P>
+
+<P>
+When you telnet, you are given, after the usual name/password login box,
+absolutely no prompt. Hopefully, this will change. The first thing you
+will want to do is import __main__. In __main__, there is a global
+named "application". This is your application. If you want, you can add
+servers to it on the fly:
+
+<PRE>
+import __main__
+from twisted.web import static, server
+file = static.File("/var/www")
+factory = server.Site(file)
+__main__.application.listenTCP(8443, factory)
+</PRE>
+
+<P>
+That's it! It really is this easy.
+</P>
+
+<P>
+Now, let us say you want to configure the server to serve another
+directory instead.
+</P>
+
+<PRE>
+import __main__
+__main__.application.ports
+-> [&lt;twisted.protocols.telnet.ShellFactory on 4040>, &lt;twisted.web.server.Site on 8443>]
+</PRE>
+
+<P>
+So it is the second port. Great!
+</P>
+
+<PRE>
+__main__.application.ports[1].factory.resource.path = 'static'
+</PRE>
+
+<P>
+In similar ways, you can configure your factory's resource to be 
+a vhost.NamedVirtualHost, configure the name servers, and leave it
+running.
+</P>
+
+<P>
+If you want to save known good configurations, just use
+</P>
+
+<PRE>
+__main__.application.save("known-good")
+</PRE>
+
+<P>
+Which will save the application to &lt;original tap file>+"known-good.tap"
+On shutdown, it will behave as if __main__.application.save("shutdown")
+has been issued.
+</P>
+
+</BODY></HTML>

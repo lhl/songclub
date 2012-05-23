@@ -1,0 +1,224 @@
+Twisted 0.12.3
+
+Quote of the Release:
+
+<Intention> Twisted did raise me from the dead after two weeks. It is a 
+miracle of software engineering.
+
+What is this?
+
+  Twisted is an event-based framework for internet applications.  It includes a
+  web server, a telnet server, a multiplayer RPG engine, a generic client and
+  server for remote object access, and APIs for creating new protocols and
+  services. Twisted supports integration of the Tk or GTK event loop with it's
+  main event loop. It also has basic support for running servers on top of
+  jython.
+
+  Twisted currently supports the following protocols, all implemented in pure
+  python, most of them as both servers and clients:
+  
+    - FTP
+    - HTTP
+    - SMTP
+    - irc
+    - telnet
+    - POP3
+    - AOL's instant messaging TOC
+    - DNS (client only)
+    - LDAP (client only)
+    - finger
+    - Echo, discard, chargen and friends
+    - Perspective Broker
+  
+  For more information, visit http://www.twistedmatrix.com.
+
+What's new in 0.12.3?
+
+  This is mainly a maintenance release; there are a bunch of bugfixes, but some
+  really cool new things.
+
+  A Configuration System. This is going to be the Next Big Thing in Twisted - 
+  right now, it's not used anywhere visibly, but the idea is a unified
+  interface for Twisted that will replace things like 'mktap'. We have a basic
+  dependancy system down, and a simple Web UI.
+
+  A few bugfixes for TK InstanceMessenger.
+
+  Docs for Delayeds: Itamar wrote up a small HTML document on how to use
+  Delayeds. Look in the 'doc/' subdirectory.
+
+  Other general bugfixes.
+
+What can I do with it?
+
+  To install Twisted, run "python setup.py build" which will build any C
+  extension modules (there is currently only one, and it is optional - there
+  is a pure-python version that will be used if the C module isn't available),
+  and then run "python setup.py install" as root to copy Twisted into Python's
+  site-packages directory, as well as install all executables.
+
+  Although there is lots of infrastructure support in Twisted, the immediately
+  useful applications for the end-user are Twisted Web and Instance Messenger.
+  Twisted Web is a webserver, written entirely in python, which is designed to
+  be "zero maintenance".  We run the twistedmatrix.com website from it, and I 
+  can testify that it has met its goals at least for me! The server can 
+  comfortably handle 50 dynamic-content requests per second on fairly old 
+  hardware (I have a Pentium II/333); however, since Twisted is entirely in
+  Python, it's quite easy to script the webserver to do whatever you like!
+
+  Instance Messenger is a multi-protocol chat client; it's easy to use: just
+  run 'im' and an "account manager" window will pop up. You can create and
+  modify accounts with it, and connect to/disconnect from them. Currently it
+  can support Twisted's own chat service, Twisted Words, Internet Relay Chat
+  (IRC), and AOL Instant Messenger (with the TOC protocol).
+
+Unit Tests
+
+  See our unit tests run in a lovely Tkinter GUI, proving that the software is
+  BugFree(TM)::
+
+   % runtests
+
+  If you're feeling more brave, you can try the new "acceptance tests".  These
+  require some setup and are mainly for the developers to decide if it's OK to
+  release, but:
+
+   % accepttests
+
+Basic Servers
+
+  There are various servers you can build and run in the main distribution,
+  although they won't be covered here.  Twisted servers do not have
+  configuration files; instead, you instantiate a server and put it into a
+  Pickle file; your servers and all of their component objects are saved in
+  that file, and can be loaded with the Twisted Daemon.
+
+  Note that the following examples only create the .tap files with the servers
+  inside of them: to actually run the servers, see "Running Servers" below.
+
+  The normal type of server to create is a webserver.  You can run this
+  command::
+
+    % mktap web --static static
+
+  which will make a "static" webserver (one that reads from the filesystem) and
+  serve pages from the provided 'static' directory.  This creates a file named
+  'web.tap'.  By default, this server will run on port 8080, but you can change
+  it with the --port option.
+
+  You can also create a telnet server::
+
+    % mktap telnet -p 8023 -u username -w password
+
+  which will create a python-console telnet server listening on port 8023,
+  which you can log into with the username "username" and the password
+  "password".  This creates a file called 'telnet.tap'
+
+  A generic chat server::
+
+    % mktap words
+
+  This creates a chat server application, with 2 different interfaces and a web
+  administration port.  Web administration can be conducted on port 8080, the
+  IRC server on 6667, and a PB service on port 8787.
+
+  You'll need to create an account with the web tool before you can log in,
+  even using IRC (a "bot" will ask you for your password upon connection).
+
+  So far the IRC gateway has only been tested with mIRC, XChat, and ircII; I
+  believe that these are relatively diverse clients, but YMMV.
+
+  The "Instance Messenger" client is a TKinter front-end to the various chat
+  services that Twisted can interface with, which are IRC, AIM, and,
+  twisted.words.  You can invoke it like this::
+
+    % im
+
+  A AOL Instant Messanger TOC Server is also available::
+
+    % mktap toc -p 5190
+
+  which creates the TOC server, running on port 5190.  To create a user, simply
+  log in with the username and password you want.  If the name is not already
+  taken on the server, it is created.  This creates a file called 'toc.tap'
+  
+Running Servers
+
+  In order to run any of these servers, run this command::
+
+    % twistd -f [application name].tap
+
+  You can stop the server at any time by going back to the directory you
+  started it in and running the command::
+
+    % kill `cat twistd.pid`
+
+"Spreadable" Webserver
+
+  The web server can also host a telnet server as well as other services;
+  mkwebserver --help can detail some of those options.  One of the most
+  interesting applications, however, is the distributed webserver; multiple
+  servers can all answer requests on the same port, using the twisted.spread
+  package for "spreadable" computing.  In two different directories, run the
+  commands::
+
+    % mktap web --user
+    % mktap web --personal [other options, if you desire]
+
+  Both of these create a 'web.tap'; you need to run both at the same time.
+  Once you have, go to http://localhost:8080/your_username.twistd/ -- you will
+  see the front page from the server you created with the --personal option.
+  What's happening here is that the request you've sent is being relayed from
+  the central (User) server to your own (Personal) server, over a PB
+  connection.  This technique can be highly useful for small "community" sites;
+  using the code that makes this demo work, you can connect one HTTP port to
+  multiple resources running with different permissions on the same machine, on
+  different local machines, or even over the internet to a remote site.
+
+Additional Servers & Services
+
+  If you are interested in twisted.reality, please see
+  http://twistedmatrix.com/reality.epy.  You'll need a map.
+
+Documentation and Support
+
+  Although this is far from enough, some examples on how to use basic Twisted
+  APIs are located in doc/examples; this might ease the learning curve a
+  little bit, since all these files are kept as short as possible.
+
+  As of this release, I realize that Twisted's documentation is rather sparse.
+  I encourage you to read the source code and docstrings, but if you're curious
+  as to what Twisted can do, please feel free to drop me an email at
+  glyph@twistedmatrix.com, or to join #python on irc.openprojects.net for some
+  live help.
+
+  Part of the problem with documentation on a project like this is that
+  everything seems obvious to me :-).  If you have trouble with a particular
+  aspect of the Twisted system, I'd like to hear about what was confusing and
+  why.  The process of your learning may be the material I build a tutorial
+  from, so don't hesitate to ask!
+
+Copyright
+
+  Most of the code in this distribution is (C) Matthew William Lefkowitz, AKA
+  "Glyph".  There is 1 exception to this: the 'pyunit' directory is a
+  derivative work of PyUnit, which can be found at
+  http://pyunit.sourceforge.net.
+
+  Twisted is made available under version 2.1 of the GNU Lesser General Public
+  License.  The included LICENSE file describes this in detail.
+
+Warranty
+
+  THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
+  EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE ENTIRE RISK AS
+  TO THE USE OF THIS SOFTWARE IS WITH YOU.
+
+  IN NO EVENT WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY
+  AND/OR REDISTRIBUTE THE LIBRARY, BE LIABLE TO YOU FOR ANY DAMAGES, EVEN IF
+  SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
+  DAMAGES.
+
+  Again, see the included LICENSE file for specific legal details.
+

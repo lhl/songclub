@@ -1,0 +1,18 @@
+Metadata-Version: 1.0
+Name: PyBeat
+Version: 0.1
+Summary: A light-weight streaming server for MP3 and OGG files.
+Home-page: http://www.pybeat.org
+Author: Christian Joergensen
+Author-email: christian.joergensen@gmta.info
+License: UNKNOWN
+Description: This is a very light-weight streaming server for MP3 and OGG files designed to work in environments where resources are limited.
+Keywords: mp3 ogg streaming
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: License :: OSI Approved :: GNU General Public License (GPL)
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Topic :: Multimedia :: Sound/Audio
