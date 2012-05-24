@@ -53,7 +53,14 @@ def store_en_info(enmfp, url):
   redis_client.set('en_artists:%s' % a.id, json.dumps(a.__dict__))
   redis_client.set('en_enmfp_by_path:%s' % u.path, enmfp)
   redis_client.set('en_song_ids_by_enmfp:%s' % enmfp, s.id)
+
+  # Only lookup/store artist terms if we dont have yet
+  key = 'en_artist_terms:%s' % a.id
+  if not redis_client.get(key):
+    redis_client.set(key, json.dumps(a.terms))
+
   return {'song': s, 'artist': a}
+
 
 
 # Store file info in redis
