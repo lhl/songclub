@@ -1,17 +1,33 @@
 SONG CLUB
+===
 
 A tool for establishing community radio among a set of friends.
 
-* Shared playlists - anyone can listen to what someone is currently listening to
-* Chat
-* RIYL - easy adding of recommendations
-* Stats - playing around w/ stats
-
-This is majorly work in progress code, I've so far only started working on the initial crawler for my music files, but I've put it up in case it's of interest.
+* Crawler - crawl, watch, and index local music
+* Streaming - Allow individual and shared playback of music
+* Liking - like, dislike, fave, and create playlists
+* Activity - track new music and social activity
+* RIYL - easily recommend music
 
 License will most likely be under GPLv3
 
+
 Requirements:
-* Python 2.4
-  * Lots of libraries, most easy_installable
-* CouchDB
+
+* Python 2.7
+  * pyechonest
+  * redis-py
+  * tornado
+  *
+
+* Redis (2.4.14)
+
+* Elastic Search
+
+API
+* Facebook
+* Last.fm
+
+For Installation Instructions, see the INSTALL doc.
+
+For additional dev docs, see https://github.com/lhl/songclub/wiki
