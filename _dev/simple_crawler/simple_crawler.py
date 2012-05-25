@@ -10,7 +10,8 @@ from pyechonest import song
 import redis
 import subprocess
 from   urlparse import urlparse
-    
+import elastic_songs
+
 
 # Globals
 search_root_dir = '/Users/gabe/code/songclub/dev/test_music'
@@ -18,6 +19,8 @@ search_root_dir = '/Users/gabe/code/songclub/dev/test_music'
 
 def main():
   redis_client = redis.Redis(host='localhost', port=6379, db=0)
+
+  elastic_songs.reset_indicies()
 
   for root, dirs, files in os.walk(search_root_dir):
     for name in files:
@@ -48,7 +51,7 @@ redis_client = redis.Redis(host='localhost', port=6379, db=0)
 def get_enmfp_json_from_mp3(url):
   enmfp_codegen_path = cfg.get('Tools', 'enmfp_codegen')
   file_path = urlparse(url).path
-  json_str = subprocess.check_output([enmfp_codegen_path, file_path, '10', '10']).decode('utf-8')
+  json_str = subprocess.check_output([enmfp_codegen_path, file_path, '30', '60']).decode('utf-8')
   result = json.loads(json_str)[0]
   return result['code']
 
@@ -57,10 +60,18 @@ def get_enmfp_json_from_mp3(url):
 # Cache EN info for each song
 def store_en_info(enmfp, url):
   u = urlparse(url)
-  s = song.identify(code=enmfp)[0] #TODO deal with more than one match
-  a = artist.Artist(id=s.artist_id)
+  s_results = song.identify(code=enmfp)
 
-  #TODO find out if we can get release info too
+  if len(s_results) == 0:
+    error = "*** ID FAIL %s" % (url)
+    print error
+    return {'error': error }
+  else:
+    s = s_results[0]
+    print "ID %s" % (url)
+    a = artist.Artist(id=s.artist_id)
+
+  #TODO get release info somehow (via en track query then rosetta lookup?)
   redis_client.set('en_songs:%s' % s.id, json.dumps(s.__dict__))
   redis_client.set('en_artists:%s' % a.id, json.dumps(a.__dict__))
   redis_client.set('en_enmfp_by_path:%s' % u.path, enmfp)
@@ -74,11 +85,18 @@ def store_en_info(enmfp, url):
   return {'song': s, 'artist': a}
 
 
+# Add file info to elastic search
+
+
+
 
 # Store file info in redis
 def ingest_file(url):
   enmfp = get_enmfp_json_from_mp3(url)
   en_info = store_en_info(enmfp, url)
+
+  if en_info.has_key('error'):
+    return # skip to next file if we don't have en info for them. TODO: something smarter here.
 
   file = {
     'enmfp': enmfp,
