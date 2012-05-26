@@ -9,50 +9,33 @@ redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
 
 def reset_indicies():
+  indicies = ['en_songs', 'files', 'en_artists', 'en_artist_terms']
+
   try:
-    es_conn.delete_index('songs')
-    es_conn.delete_index('files')
-    es_conn.delete_index('artists')
+    for index in indicies:
+      es_conn.delete_index(index) 
   except:
     pass
 
-  es_conn.create_index("songs")
-  es_conn.create_index("files")
-  es_conn.create_index("artists")
+  for index in indicies:
+    es_conn.create_index(index) 
 
 
 def repopulate_from_redis():
   reset_indicies()
 
-  song_keys = redis_client.keys('en_songs:*')
-  for song_key in song_keys:
-    song_doc = redis_client.get(song_key)
-    add_song(song_doc)
+  def repop_es(redis_key_prefix, es_index_name, es_doc_type):
+    keys = redis_client.keys(redis_key_prefix + ':*')
+    for key in keys:
+      doc = redis_client.get(key)
+      es_conn.index(doc, es_index_name, es_doc_type, bulk=True)
 
-  artist_keys = redis_client.keys('en_artists:*')
-  for artist_key in song_keys:
-    artist_doc = redis_client.get(artist_key)
-    add_artist(artist_doc)
-
-  file_keys = redis_client.keys('files:*')
-  for file_key in file_keys:
-    file_doc = redis_client.get(file_key)
-    add_file(file_doc)
+  repop_es(redis_key_prefix='en_songs', es_index_name='en_songs', es_doc_type='song')
+  repop_es(redis_key_prefix='en_artists', es_index_name='en_artists', es_doc_type='artist')
+  #repop_es(redis_key_prefix='en_artist_terms', es_index_name='en_artist_terms', es_doc_type='artist_terms')
+  repop_es(redis_key_prefix='files', es_index_name='files', es_doc_type='file')
 
   es_conn.refresh()
-
-
-
-def add_file(file_doc, bulk=True):
-  es_conn.index(file_doc, 'files', 'file', bulk=bulk)
-
-
-def add_song(song_doc, bulk=True):
-  es_conn.index(song_doc, 'songs', 'song', bulk=bulk)
-
-
-def add_artist(artist_doc, bulk=True):
-  es_conn.index(artist_doc, 'artists', 'artist', bulk=bulk)
 
 
 """ 

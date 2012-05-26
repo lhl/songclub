@@ -97,8 +97,13 @@ def store_en_info(url):
     a = artist.Artist(id=s.artist_id)
 
   #TODO get release info somehow (via en track query then rosetta lookup?)
+
+  # Add artist terms to artist obj for json dump
+  ao = a.__dict__
+  ao['terms'] = a.terms
+
   redis_client.set('en_songs:%s' % s.id, json.dumps(s.__dict__))
-  redis_client.set('en_artists:%s' % a.id, json.dumps(a.__dict__))
+  redis_client.set('en_artists:%s' % a.id, json.dumps(ao))
   redis_client.set('en_enmfp_by_path:%s' % u.path, enmfp)
   redis_client.set('en_song_ids_by_enmfp:%s' % enmfp, s.id)
 
