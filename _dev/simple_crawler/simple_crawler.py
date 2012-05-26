@@ -15,7 +15,7 @@ import hashlib
 import id3
 
 # Globals
-search_root_dir = '/Users/gabe/code/songclub/dev/test_music'
+search_root_dir = '/Users/gabe/code/songclub/_dev/test_music'
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
 
