@@ -60,4 +60,8 @@ Example of how to query elastic_search
 q = TermQuery("title", "slow")
 qr = es_conn.search(q.search())
 qr.hits
+
+Elastic Search http interface example urls:
+Search  http://127.0.0.1:9200/files/_search?q=title:slow
+Status  http://127.0.0.1:9200/_cluster/state   
 """
