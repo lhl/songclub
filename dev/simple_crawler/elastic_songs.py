@@ -34,6 +34,11 @@ def repopulate_from_redis():
     artist_doc = redis_client.get(artist_key)
     add_artist(artist_doc)
 
+  file_keys = redis_client.keys('files:*')
+  for file_key in file_keys:
+    file_doc = redis_client.get(file_key)
+    add_file(file_doc)
+
   es_conn.refresh()
 
 
