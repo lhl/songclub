@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 '''
+
 TODOs:
 
 See: 
@@ -42,7 +43,6 @@ import time
 import thread
 import threading
 
-
 def channel(threadname, loc):
   s = shout.Shout()
   # print "Using libshout version %s" % shout.version()
@@ -52,7 +52,7 @@ def channel(threadname, loc):
   # s.host = 'localhost'
   # s.port = 8000
   # s.user = 'source'
-  s.password = "don'thackme"
+  s.password = "hackme"
   s.mount = "/pyshout" + str(loc) + ".mp3"
   s.protocol = 'http'
   s.format = 'mp3'
@@ -71,7 +71,7 @@ def channel(threadname, loc):
   total = 0
   st = time.time()
 
-  fa = '/locker/music/_misc/yeswecan.mp3'
+  fa = '1.mp3'
 
   # for fa in sys.argv[1:]:
   print "opening file %s" % fa
@@ -87,11 +87,11 @@ def channel(threadname, loc):
       break
     s.send(buf)
     s.sync()
-    f.close()
+  f.close()
       
-    et = time.time()
-    br = total*0.008/(et-st)
-    print "Sent %d bytes in %d seconds (%f kbps)" % (total, et-st, br)
+  et = time.time()
+  br = total*0.008/(et-st)
+  print "Sent %d bytes in %d seconds (%f kbps)" % (total, et-st, br)
 
   print s.close()
   thread.interrupt_main()
