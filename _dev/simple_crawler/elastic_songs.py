@@ -9,7 +9,7 @@ redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
 
 def reset_indicies():
-  indicies = ['en_songs', 'files', 'en_artists', 'en_artist_terms']
+  indicies = ['en_songs', 'files', 'en_artists']
 
   try:
     for index in indicies:
@@ -32,7 +32,6 @@ def repopulate_from_redis():
 
   repop_es(redis_key_prefix='en_songs', es_index_name='en_songs', es_doc_type='song')
   repop_es(redis_key_prefix='en_artists', es_index_name='en_artists', es_doc_type='artist')
-  #repop_es(redis_key_prefix='en_artist_terms', es_index_name='en_artist_terms', es_doc_type='artist_terms')
   repop_es(redis_key_prefix='files', es_index_name='files', es_doc_type='file')
 
   es_conn.refresh()
