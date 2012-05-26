@@ -4,4 +4,4 @@
 *.log
 *.config
 ENMFP_codegen/*
-dev/test_music/*
+_dev/test_music/*
