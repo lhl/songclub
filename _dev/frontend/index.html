@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SongClub</title>
+    <script data-main='js/main' src="js/vendor/require.min.js"></script>
+  </head>
+
+  <body>
+    <div class='files_list'></div>
+  </body>
+
+  <script type='text/html' id='file_template'>
+    <%= file.get('path') %>
+  </script>
+
+  <script type='text/html' id='files_list_template'>
+    <ul>
+      <% files.each(function(file) { %>
+        <li>
+          <%= file.get('path') %>
+        </li>
+      <% }) %>
+    </ul>
+  </script>
+
+  <script type='text/html' id='artists_list_template'>
+    <ul class='artists'>
+      <% artists.each(function(artist) { %>
+        <li class='artist'>
+          <%= artist.get('name') %>
+        </li>
+      <% }) %>
+    </ul>
+  </script>
+</html>
