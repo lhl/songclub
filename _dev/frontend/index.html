@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Tweets</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="http://cloud.github.com/downloads/emberjs/ember.js/ember-0.9.6.min.js"></script>
+    <script src="javascripts/app.js"></script>
+  </head>
+  <body>
+    <h1>Songs</h1>
+    <script type="text/x-handlebars">
+      <div id="frm">
+        {{view App.SearchTextField placeholder="Search for a song" valueBinding="App.filesController.query"}}
+        <button {{action "loadFiles" target="App.filesController"}}>Go!</button>
+      </div>
+      <div id="file">
+      </div>
+    </script>
+  </body>
+</html>
+
