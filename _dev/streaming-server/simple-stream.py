@@ -10,7 +10,7 @@ s = shout.Shout()
 # s.host = 'localhost'
 # s.port = 8000
 # s.user = 'source'
-s.password = "hackme"
+s.password = "don'thackme"
 s.mount = "/pyshout/" + fa
 s.protocol = 'http'
 s.format = 'mp3'
@@ -32,24 +32,25 @@ total = 0
 st = time.time()
 
 
-print "opening file %s" % fa
-f = open(fa, 'r')
-s.set_metadata({'song': fa})
-
-
-nbuf = f.read(4096)
 while 1:
-  buf = nbuf
-  nbuf = f.read(4096)
-  total = total + len(buf)
-  if len(buf) == 0:
-    break
-  s.send(buf)
-  s.sync()
-f.close()
+  print "opening file %s" % fa
+  f = open(fa, 'r')
+  s.set_metadata({'song': fa})
 
-et = time.time()
-br = total*0.008/(et-st)
-print "Sent %d bytes in %d seconds (%f kbps)" % (total, et-st, br)
+
+  nbuf = f.read(4096)
+  while 1:
+    buf = nbuf
+    nbuf = f.read(4096)
+    total = total + len(buf)
+    if len(buf) == 0:
+      break
+    s.send(buf)
+    s.sync()
+  f.close()
+
+  et = time.time()
+  br = total*0.008/(et-st)
+  print "Sent %d bytes in %d seconds (%f kbps)" % (total, et-st, br)
 
 s.close()
