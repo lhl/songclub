@@ -1,0 +1,61 @@
+DEPENDENCIES
+===
+
+redis (2.4.14)
+http://redis.io/download
+
+https://gist.github.com/1925736
+http://www.denofubiquity.com/nosql/412/
+
+===
+
+elasticsearch (0.19.4)
+http://www.elasticsearch.org/download/
+
+* untar/unzip to /usr/local/
+* symlink to /usr/local/elasticsearch
+* /usr/local/elasticsearch/bin/elasticsearch
+
+Test:
+curl -XGET 'http://localhost:9200/_cluster/nodes'
+
+See: http://www.elasticsearch.org/guide/
+
+===
+
+ENMFP
+http://developer.echonest.com/downloads/license
+
+
+===
+supervisord
+apt-get install supervisor
+
+===
+
+python (2.7)
+apt-get install python
+
+Python Libraries
+
+pyechonest
+
+
+http://packages.python.org/watchdog/
+https://github.com/seb-m/pyinotify
+
+
+
+
+
+
+=== Libraries Included ===
+
+JQuery
+http://jquery.com/
+
+SoundManager 2
+http://www.schillmania.com/projects/soundmanager2/
+
+EchoNest ENMFP
+http://developer.echonest.com/downloads/license
