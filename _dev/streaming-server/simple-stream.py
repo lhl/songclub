@@ -4,7 +4,7 @@ import shout
 import sys
 import time
 
-fa = '00.mp3'
+fa = '1.mp3'
 
 s = shout.Shout()
 # s.host = 'localhost'
@@ -44,8 +44,8 @@ while 1:
   total = total + len(buf)
   if len(buf) == 0:
     break
-  # s.send(buf)
-  # s.sync()
+  s.send(buf)
+  s.sync()
 f.close()
 
 et = time.time()
