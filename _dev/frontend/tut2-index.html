@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+    <title>Tweets</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="http://cloud.github.com/downloads/emberjs/ember.js/ember-0.9.6.min.js"></script>
+    <script src="javascripts/app.js"></script>
+</head>
+<body>
+    <script type="text/x-handlebars">
+        <div id="frm">
+            <b>Load Tweets for: </b>
+            {{view App.SearchTextField placeholder="Twitter username" valueBinding="App.tweetsController.username"}}
+<button {{action "loadTweets" target="App.tweetsController"}}>Go!</button>
+        </div>
+        <div id="content">
+            <div id="recent">
+                <h3>Recent Users</h3>
+            </div>
+            <div id="tweets">
+                <h3>Tweets</h3>
+            </div>
+        </div>
+    </script>
+</body>
+</html>

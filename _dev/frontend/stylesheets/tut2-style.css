@@ -1,0 +1,83 @@
+* {
+	font-family: 'tahoma', sans-serif;
+}
+body {
+	background: #eeeeee;
+}
+#frm {
+	margin: 0 auto 15px auto;
+	width: 600px;
+	text-align: center;
+}
+#content {
+	width: 600px;
+	border: 1px solid green;
+	margin: 0 auto;
+}
+	#recent {
+		float: left;
+		width: 190px;
+	}
+		#recent ol {
+			margin: 0 0 0 15px;
+			padding: 0;
+		}
+			#recent old li {
+				padding: 5px;
+			}
+	#tweets {
+		width: 385px;
+		float: right;
+	}
+		#tweets ul {
+			padding: 0;
+			border: 1px solid #999999;
+		}
+			#tweets ul li {
+				text-align: left;
+				margin: 0;
+				padding: 10px;
+				list-style: none;
+				border-bottom: 1px solid #999999;
+				min-height: 50px;
+				background: #eeeeee; /* Old browsers */
+				background: -moz-linear-gradient(top,  #eeeeee 0%, #dddddd 100%); /* FF3.6+ */
+				background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#dddddd)); /* Chrome,Safari4+ */
+				background: -webkit-linear-gradient(top,  #eeeeee 0%,#dddddd 100%); /* Chrome10+,Safari5.1+ */
+				background: -o-linear-gradient(top,  #eeeeee 0%,#dddddd 100%); /* Opera 11.10+ */
+				background: -ms-linear-gradient(top,  #eeeeee 0%,#dddddd 100%); /* IE10+ */
+				background: linear-gradient(top,  #eeeeee 0%,#dddddd 100%); /* W3C */
+				filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#dddddd',GradientType=0 ); /* IE6-9 */
+			}
+				#tweets ul li:hover {
+					background: #cfe7fa; /* Old browsers */
+					background: -moz-linear-gradient(top,  #cfe7fa 0%, #6393c1 100%); /* FF3.6+ */
+					background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cfe7fa), color-stop(100%,#6393c1)); /* Chrome,Safari4+ */
+					background: -webkit-linear-gradient(top,  #cfe7fa 0%,#6393c1 100%); /* Chrome10+,Safari5.1+ */
+					background: -o-linear-gradient(top,  #cfe7fa 0%,#6393c1 100%); /* Opera 11.10+ */
+					background: -ms-linear-gradient(top,  #cfe7fa 0%,#6393c1 100%); /* IE10+ */
+					background: linear-gradient(top,  #cfe7fa 0%,#6393c1 100%); /* W3C */
+					filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cfe7fa', endColorstr='#6393c1',GradientType=0 ); /* IE6-9 */
+				}
+				#tweets ul li span {
+					float: right;
+					font-size: 8pt;
+					color: #888888;
+				}
+				#tweets ul li img {
+					float: left;
+					margin: 0 10px 0 0;
+					width: 48px;
+					height: 48px;
+				}
+				#tweets ul li h3 {
+					font-size: 11pt;
+					margin: 0;
+				}
+				#tweets ul li p {
+					margin: 0;
+					font-size: 10pt;
+				}
+
+
+

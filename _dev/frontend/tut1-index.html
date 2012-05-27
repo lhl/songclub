@@ -1,0 +1,29 @@
+<!doctype html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>SongClub</title>
+
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="stylesheets/style.css?v=2">
+
+  <script src="javascripts/vendor/jquery/jquery-1.7.2.min.js"></script>
+  <script src="javascripts/vendor/ember/ember-0.9.8.1.min.js"></script>
+  <script src="javascripts/app.js"></script>
+</head>
+<body>
+  <h1>Sup</h1>
+  <script type="text/x-handlebars">
+    <img {{bindAttr src="Example.logo"}} alt="Logo"><br />
+    <h1>{{ Example.name }}</h1>
+	  {{view Example.ChangeQuery id="new-todo" placeholder="#EmberJS"}}
+    
+    {{#view Example.LoopingView id="looping-view" }}
+      {{#each Example.populate}}
+        <li>{{ from_user_name }} - {{ text }}!</li>
+      {{/each}}
+    {{/view }}
+  </script>
+</body>
+</html>
